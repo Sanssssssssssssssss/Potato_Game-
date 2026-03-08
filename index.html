@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spud Arena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@700;800&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="hero-copy">
+      <p class="eyebrow">Arcade Survival</p>
+      <h1>Spud Arena</h1>
+      <p class="lede">
+        一个受土豆兄弟启发的简化版生存射击游戏。你会自动攻击，目标是在越来越密集的菜园围剿中活下来。
+      </p>
+      <div class="feature-list">
+        <span>自动射击</span>
+        <span>升级三选一</span>
+        <span>Boss 波次</span>
+        <span>全屏支持</span>
+      </div>
+    </section>
+    <section class="game-panel">
+      <canvas id="game" width="1280" height="720" aria-label="Spud Arena game canvas"></canvas>
+      <div class="panel-footer">
+        <span>移动: WASD / 方向键</span>
+        <span>选择升级: 1 / 2 / 3 或鼠标</span>
+        <span>全屏: F</span>
+      </div>
+    </section>
+  </main>
+  <script src="./game.js"></script>
+</body>
+</html>
