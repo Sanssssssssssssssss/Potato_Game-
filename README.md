@@ -10,15 +10,36 @@ Spud Arena is a polished, no-build browser survival shooter inspired by Brotato.
 - Fullscreen toggle on `F`
 - Deterministic hooks for browser automation: `window.render_game_to_text()` and `window.advanceTime(ms)`
 
-## Run
+## Run In VSCode
 
-Open [index.html](/D:/GPT_Project/ArtGame/index.html) directly in a browser, or serve the folder locally:
+### Option 1: Terminal
+
+Open the integrated terminal in VSCode and run:
 
 ```powershell
-py -m http.server 4173
+npm run dev
 ```
 
-Then open `http://127.0.0.1:4173/index.html`.
+Then open:
+
+```text
+http://127.0.0.1:4173/index.html
+```
+
+### Option 2: VSCode Run Button
+
+This repo now includes:
+
+- `.vscode/tasks.json` to start the local server
+- `.vscode/launch.json` to open the game in Edge or Chrome
+
+In VSCode:
+
+1. Open the Run and Debug panel.
+2. Choose `Open Spud Arena (Edge)` or `Open Spud Arena (Chrome)`.
+3. Press `F5`.
+
+VSCode will start the local server automatically and open the game URL.
 
 ## Controls
 
@@ -32,4 +53,5 @@ Then open `http://127.0.0.1:4173/index.html`.
 - [index.html](/D:/GPT_Project/ArtGame/index.html): page shell
 - [styles.css](/D:/GPT_Project/ArtGame/styles.css): layout and presentation
 - [game.js](/D:/GPT_Project/ArtGame/game.js): gameplay, rendering, and state hooks
+- [package.json](/D:/GPT_Project/ArtGame/package.json): local run scripts
 - [test-actions.json](/D:/GPT_Project/ArtGame/test-actions.json): Playwright action burst used for verification

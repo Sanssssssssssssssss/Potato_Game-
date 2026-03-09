@@ -6,4 +6,5 @@ Original prompt: 目前这是一个空文件夹，我需要你写一个游戏并
 - Installed Node.js locally, installed Playwright in the skill directory, and verified the game with the required web-game client.
 - Verified outputs from `output/web-game/`: menu render, active gameplay at wave 2, and level-up overlay with upgrade choices. No console/page errors were emitted during the automated run.
 - Added `README.md`, `.gitignore`, and `test-actions.json` for repo hygiene and reproducible checks.
-- GitHub remote is still not configured, and GitHub CLI is not installed yet. Need to resolve GitHub access before pushing upstream.
+- Added `package.json` plus `.vscode/tasks.json` and `.vscode/launch.json` so the project can be run directly from VSCode via `npm run dev` or `F5`.
+- Repository has been pushed to GitHub, including merge to `main`.

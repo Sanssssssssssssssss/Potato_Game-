@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Open Spud Arena (Edge)",
+      "type": "pwa-msedge",
+      "request": "launch",
+      "url": "http://127.0.0.1:4173/index.html",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Run Spud Arena Server"
+    },
+    {
+      "name": "Open Spud Arena (Chrome)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://127.0.0.1:4173/index.html",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Run Spud Arena Server"
+    }
+  ]
+}
