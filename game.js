@@ -18,45 +18,45 @@
   const upgradeCatalog = [
     {
       id: "rapid-fire",
-      title: "齿轮润滑",
-      subtitle: "攻速强化",
-      detail: "射击间隔缩短 18%。",
+      title: "Clockwork Oil",
+      subtitle: "Attack speed",
+      detail: "Fire interval is reduced by 18%.",
       apply: (state) => {
         state.player.fireRate *= 0.82;
       }
     },
     {
       id: "heavy-rounds",
-      title: "压实弹丸",
-      subtitle: "伤害强化",
-      detail: "子弹伤害 +12。",
+      title: "Packed Rounds",
+      subtitle: "Damage boost",
+      detail: "Projectiles deal 12 more damage.",
       apply: (state) => {
         state.player.damage += 12;
       }
     },
     {
       id: "greased-boots",
-      title: "滚烫黄油",
-      subtitle: "移动强化",
-      detail: "移动速度 +12%。",
+      title: "Butter Slide",
+      subtitle: "Move speed",
+      detail: "Movement speed increases by 12%.",
       apply: (state) => {
         state.player.speed *= 1.12;
       }
     },
     {
       id: "wide-burst",
-      title: "双发发射",
-      subtitle: "火力强化",
-      detail: "每轮多发射 1 枚子弹。",
+      title: "Twin Burst",
+      subtitle: "Firepower",
+      detail: "Shoot one additional potato shot each volley.",
       apply: (state) => {
         state.player.multishot += 1;
       }
     },
     {
       id: "hot-soup",
-      title: "热汤补给",
-      subtitle: "续航强化",
-      detail: "最大生命 +20，当前回复 20。",
+      title: "Hot Soup",
+      subtitle: "Recovery",
+      detail: "Gain 20 max HP and heal 20 immediately.",
       apply: (state) => {
         state.player.maxHp += 20;
         state.player.hp = Math.min(state.player.maxHp, state.player.hp + 20);
@@ -64,9 +64,9 @@
     },
     {
       id: "sniper-salt",
-      title: "海盐瞄具",
-      subtitle: "弹速强化",
-      detail: "子弹速度 +18%，射程略增。",
+      title: "Sniper Salt",
+      subtitle: "Projectile speed",
+      detail: "Shots travel 18% faster and reach farther.",
       apply: (state) => {
         state.player.projectileSpeed *= 1.18;
         state.player.range += 60;
@@ -74,9 +74,9 @@
     },
     {
       id: "thresher-ring",
-      title: "旋耕护环",
-      subtitle: "近战护体",
-      detail: "生成一个环绕刀片。",
+      title: "Thresher Ring",
+      subtitle: "Orbiting blade",
+      detail: "Summon a rotating blade around the hero.",
       apply: (state) => {
         state.player.orbitals += 1;
       }
@@ -556,55 +556,119 @@
     };
   }
 
+  function drawRoundedPanel(x, y, width, height, radius, fill, stroke) {
+    ctx.fillStyle = fill;
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(x, y, width, height, radius);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function drawEye(x, y, size) {
+    ctx.fillStyle = "#1c0d09";
+    ctx.beginPath();
+    ctx.arc(x, y, size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.35)";
+    ctx.beginPath();
+    ctx.arc(x - size * 0.22, y - size * 0.22, size * 0.28, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
   function drawBackground(camera) {
     const sky = ctx.createLinearGradient(0, 0, 0, HEIGHT);
-    sky.addColorStop(0, "#ffefcc");
-    sky.addColorStop(0.4, "#f8c27b");
-    sky.addColorStop(1, "#7d462c");
+    sky.addColorStop(0, "#fce7c9");
+    sky.addColorStop(0.3, "#f3b670");
+    sky.addColorStop(0.72, "#955330");
+    sky.addColorStop(1, "#36140c");
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-    const horizon = HEIGHT * 0.36;
-    ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
+    const sun = ctx.createRadialGradient(WIDTH * 0.78, HEIGHT * 0.18, 0, WIDTH * 0.78, HEIGHT * 0.18, 180);
+    sun.addColorStop(0, "rgba(255, 246, 210, 0.9)");
+    sun.addColorStop(0.35, "rgba(255, 205, 132, 0.56)");
+    sun.addColorStop(1, "rgba(255, 190, 110, 0)");
+    ctx.fillStyle = sun;
     ctx.beginPath();
-    ctx.ellipse(WIDTH * 0.14, horizon - 40, 180, 72, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(WIDTH * 0.82, horizon - 26, 160, 60, 0, 0, Math.PI * 2);
+    ctx.arc(WIDTH * 0.78, HEIGHT * 0.18, 180, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = "#aa643c";
+    const horizon = HEIGHT * 0.38;
+    ctx.fillStyle = "rgba(255, 255, 255, 0.14)";
     ctx.beginPath();
-    ctx.moveTo(0, horizon + 16);
-    for (let x = 0; x <= WIDTH; x += 120) {
-      ctx.lineTo(x, horizon + Math.sin((x + state.worldPulse * 120) * 0.008) * 22);
+    ctx.ellipse(WIDTH * 0.18, horizon - 56, 220, 82, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(WIDTH * 0.78, horizon - 12, 180, 68, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#7e3f24";
+    ctx.beginPath();
+    ctx.moveTo(0, horizon + 10);
+    for (let x = 0; x <= WIDTH; x += 90) {
+      ctx.lineTo(x, horizon + Math.sin((x + state.worldPulse * 90) * 0.0065) * 26);
     }
     ctx.lineTo(WIDTH, HEIGHT);
     ctx.lineTo(0, HEIGHT);
     ctx.closePath();
     ctx.fill();
 
+    ctx.fillStyle = "#5e2717";
+    ctx.beginPath();
+    ctx.moveTo(0, horizon + 52);
+    for (let x = 0; x <= WIDTH; x += 70) {
+      ctx.lineTo(x, horizon + 50 + Math.cos((x + state.worldPulse * 130) * 0.01) * 18);
+    }
+    ctx.lineTo(WIDTH, HEIGHT);
+    ctx.lineTo(0, HEIGHT);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(255, 235, 205, 0.08)";
+    for (let i = 0; i < 18; i += 1) {
+      const x = (i * 93 + state.worldPulse * 22) % (WIDTH + 120) - 60;
+      const y = 120 + (i % 6) * 42;
+      ctx.beginPath();
+      ctx.arc(x, y, 2 + (i % 3), 0, Math.PI * 2);
+      ctx.fill();
+    }
+
     ctx.save();
     ctx.translate(HALF_W - camera.x, HALF_H - camera.y);
 
     const field = ctx.createLinearGradient(0, 0, 0, WORLD.height);
-    field.addColorStop(0, "#cc8f45");
-    field.addColorStop(1, "#6f4026");
+    field.addColorStop(0, "#bf7b3a");
+    field.addColorStop(0.45, "#99552d");
+    field.addColorStop(1, "#4a2417");
     ctx.fillStyle = field;
     ctx.fillRect(0, 0, WORLD.width, WORLD.height);
 
     for (let x = 0; x < WORLD.width; x += 120) {
-      ctx.strokeStyle = "rgba(83, 44, 23, 0.2)";
+      ctx.strokeStyle = "rgba(63, 23, 10, 0.22)";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(x, 0);
-      ctx.lineTo(x + Math.sin(state.worldPulse + x * 0.01) * 36, WORLD.height);
+      ctx.lineTo(x + Math.sin(state.worldPulse + x * 0.008) * 44, WORLD.height);
       ctx.stroke();
     }
 
     for (let y = 140; y < WORLD.height; y += 220) {
-      ctx.fillStyle = "rgba(255, 239, 204, 0.08)";
-      ctx.fillRect(0, y, WORLD.width, 16);
+      ctx.fillStyle = "rgba(255, 239, 204, 0.07)";
+      ctx.fillRect(0, y, WORLD.width, 18);
+    }
+
+    for (let x = 60; x < WORLD.width; x += 120) {
+      for (let y = 60; y < WORLD.height; y += 120) {
+        const sway = Math.sin((x + y) * 0.01 + state.worldPulse * 2.5) * 4;
+        ctx.strokeStyle = "rgba(255, 211, 129, 0.12)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x, y + 12);
+        ctx.quadraticCurveTo(x + sway, y - 8, x + sway * 0.4, y - 24);
+        ctx.stroke();
+      }
     }
 
     for (const splat of state.splats) {
@@ -615,6 +679,12 @@
     }
 
     ctx.restore();
+
+    const vignette = ctx.createRadialGradient(WIDTH / 2, HEIGHT / 2, HEIGHT * 0.2, WIDTH / 2, HEIGHT / 2, HEIGHT * 0.78);
+    vignette.addColorStop(0, "rgba(0,0,0,0)");
+    vignette.addColorStop(1, "rgba(22,6,3,0.28)");
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
   }
 
   function drawShadow(x, y, rx, ry, alpha) {
@@ -630,7 +700,11 @@
 
     for (const pickup of state.pickups) {
       const bob = Math.sin(pickup.phase) * 4;
-      drawShadow(pickup.x, pickup.y + 16, 13, 7, 0.18);
+      drawShadow(pickup.x, pickup.y + 18, 14, 8, 0.22);
+      ctx.fillStyle = "rgba(255, 234, 151, 0.22)";
+      ctx.beginPath();
+      ctx.arc(pickup.x, pickup.y + bob, pickup.radius * 1.8, 0, Math.PI * 2);
+      ctx.fill();
       ctx.fillStyle = "#fff3b0";
       ctx.beginPath();
       ctx.arc(pickup.x, pickup.y + bob, pickup.radius, 0, Math.PI * 2);
@@ -643,6 +717,10 @@
 
     for (const projectile of state.projectiles) {
       drawShadow(projectile.x, projectile.y + 13, 14, 7, 0.18);
+      ctx.fillStyle = `hsla(${projectile.hue} 100% 70% / 0.2)`;
+      ctx.beginPath();
+      ctx.arc(projectile.x, projectile.y, projectile.radius * 1.8, 0, Math.PI * 2);
+      ctx.fill();
       ctx.fillStyle = `hsl(${projectile.hue} 100% 70%)`;
       ctx.beginPath();
       ctx.arc(projectile.x, projectile.y, projectile.radius, 0, Math.PI * 2);
@@ -655,21 +733,32 @@
 
     for (const enemy of state.enemies) {
       drawShadow(enemy.x, enemy.y + enemy.radius * 0.72, enemy.radius * 0.8, enemy.radius * 0.36, 0.2);
-      ctx.fillStyle = enemy.hitFlash > 0 ? "#fff8e1" : enemy.color;
+      const enemyGradient = ctx.createRadialGradient(
+        enemy.x - enemy.radius * 0.28,
+        enemy.y - enemy.radius * 0.3,
+        enemy.radius * 0.2,
+        enemy.x,
+        enemy.y,
+        enemy.radius * 1.15
+      );
+      enemyGradient.addColorStop(0, enemy.hitFlash > 0 ? "#fff8e1" : "#d8f59f");
+      enemyGradient.addColorStop(0.45, enemy.hitFlash > 0 ? "#fff1cb" : enemy.color);
+      enemyGradient.addColorStop(1, enemy.kind === "boss" ? "#1c0d09" : "rgba(31, 14, 8, 0.86)");
+      ctx.fillStyle = enemyGradient;
       ctx.beginPath();
       ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = "rgba(255, 241, 218, 0.22)";
+      ctx.strokeStyle = "rgba(33, 12, 8, 0.32)";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.fillStyle = "rgba(255, 241, 218, 0.18)";
       ctx.beginPath();
       ctx.arc(enemy.x - enemy.radius * 0.26, enemy.y - enemy.radius * 0.22, enemy.radius * 0.42, 0, Math.PI * 2);
       ctx.fill();
 
       const eyeOffset = enemy.kind === "boss" ? 12 : 7;
-      ctx.fillStyle = "#1c0d09";
-      ctx.beginPath();
-      ctx.arc(enemy.x - eyeOffset, enemy.y - 4, 4, 0, Math.PI * 2);
-      ctx.arc(enemy.x + eyeOffset, enemy.y - 4, 4, 0, Math.PI * 2);
-      ctx.fill();
+      drawEye(enemy.x - eyeOffset, enemy.y - 4, 4);
+      drawEye(enemy.x + eyeOffset, enemy.y - 4, 4);
 
       if (enemy.kind === "boss") {
         ctx.strokeStyle = "rgba(255, 226, 179, 0.36)";
@@ -677,43 +766,91 @@
         ctx.beginPath();
         ctx.arc(enemy.x, enemy.y, enemy.radius + 10 + Math.sin(state.time * 4) * 4, 0, Math.PI * 2);
         ctx.stroke();
+        ctx.fillStyle = "rgba(255, 205, 142, 0.14)";
+        ctx.beginPath();
+        ctx.arc(enemy.x, enemy.y, enemy.radius + 18, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.strokeStyle = "rgba(61, 31, 10, 0.48)";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(enemy.x, enemy.y + enemy.radius * 0.14, enemy.radius * 0.35, 0.25, Math.PI - 0.25);
+        ctx.stroke();
       }
+
+      const hpWidth = enemy.radius * 1.7;
+      ctx.fillStyle = "rgba(24, 9, 4, 0.35)";
+      ctx.beginPath();
+      ctx.roundRect(enemy.x - hpWidth / 2, enemy.y - enemy.radius - 18, hpWidth, 6, 999);
+      ctx.fill();
+      ctx.fillStyle = enemy.kind === "boss" ? "#ffd479" : "#a7ef7d";
+      ctx.beginPath();
+      ctx.roundRect(enemy.x - hpWidth / 2, enemy.y - enemy.radius - 18, hpWidth * (enemy.hp / enemy.maxHp), 6, 999);
+      ctx.fill();
     }
 
     const player = state.player;
-    drawShadow(player.x, player.y + player.radius + 10, player.radius * 0.95, player.radius * 0.42, 0.2);
-    ctx.fillStyle = player.invuln > 0 ? "#fff9dd" : "#d5a15d";
+    drawShadow(player.x, player.y + player.radius + 12, player.radius, player.radius * 0.44, 0.24);
+    const playerGradient = ctx.createRadialGradient(
+      player.x - 10,
+      player.y - 18,
+      4,
+      player.x,
+      player.y,
+      player.radius * 1.15
+    );
+    playerGradient.addColorStop(0, player.invuln > 0 ? "#fffdf1" : "#ffdfa3");
+    playerGradient.addColorStop(0.4, player.invuln > 0 ? "#fff2cb" : "#d8a460");
+    playerGradient.addColorStop(1, "#7f4d2c");
+    ctx.fillStyle = playerGradient;
     ctx.beginPath();
     ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = "#f4d4a5";
+    ctx.strokeStyle = "rgba(64, 23, 11, 0.35)";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.fillStyle = "#f8e3b5";
     ctx.beginPath();
-    ctx.arc(player.x - 10, player.y - 10, player.radius * 0.45, 0, Math.PI * 2);
+    ctx.arc(player.x - 10, player.y - 10, player.radius * 0.44, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = "#322118";
-    ctx.beginPath();
-    ctx.arc(player.x - 8, player.y - 2, 5, 0, Math.PI * 2);
-    ctx.arc(player.x + 8, player.y - 2, 5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = "#322118";
+    drawEye(player.x - 8, player.y - 2, 5);
+    drawEye(player.x + 8, player.y - 2, 5);
+    ctx.strokeStyle = "#3b2016";
     ctx.lineWidth = 5;
     ctx.beginPath();
     ctx.arc(player.x, player.y + 4, 11, 0.2, Math.PI - 0.2);
     ctx.stroke();
 
-    ctx.strokeStyle = "#6c3a1e";
-    ctx.lineWidth = 10;
+    ctx.strokeStyle = "#5d2f19";
+    ctx.lineWidth = 12;
     ctx.lineCap = "round";
     ctx.beginPath();
-    ctx.moveTo(player.x, player.y);
+    ctx.moveTo(player.x - Math.cos(player.aimAngle) * 4, player.y - Math.sin(player.aimAngle) * 4);
+    ctx.lineTo(player.x + Math.cos(player.aimAngle) * 38, player.y + Math.sin(player.aimAngle) * 38);
+    ctx.stroke();
+    ctx.strokeStyle = "#f3c577";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(player.x + Math.cos(player.aimAngle) * 10, player.y + Math.sin(player.aimAngle) * 10);
     ctx.lineTo(player.x + Math.cos(player.aimAngle) * 34, player.y + Math.sin(player.aimAngle) * 34);
     ctx.stroke();
+
+    if (player.fireCooldown > player.fireRate * 0.7) {
+      ctx.fillStyle = "rgba(255, 212, 118, 0.45)";
+      ctx.beginPath();
+      ctx.arc(player.x + Math.cos(player.aimAngle) * 42, player.y + Math.sin(player.aimAngle) * 42, 12, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     for (let o = 0; o < player.orbitals; o += 1) {
       const angle = state.time * 2.6 + (Math.PI * 2 * o) / Math.max(1, player.orbitals);
       const ox = player.x + Math.cos(angle) * 72;
       const oy = player.y + Math.sin(angle) * 72;
       drawShadow(ox, oy + 10, 16, 7, 0.16);
+      ctx.fillStyle = "rgba(255, 200, 96, 0.22)";
+      ctx.beginPath();
+      ctx.arc(ox, oy, 18, 0, Math.PI * 2);
+      ctx.fill();
       ctx.fillStyle = "#ffcb60";
       ctx.beginPath();
       ctx.moveTo(ox, oy - 16);
@@ -722,6 +859,9 @@
       ctx.lineTo(ox - 11, oy);
       ctx.closePath();
       ctx.fill();
+      ctx.strokeStyle = "#fff2c9";
+      ctx.lineWidth = 2;
+      ctx.stroke();
     }
 
     for (const particle of state.particles) {
@@ -740,54 +880,59 @@
   function drawHud() {
     const player = state.player;
     ctx.save();
-    ctx.fillStyle = "rgba(45, 18, 10, 0.76)";
-    ctx.strokeStyle = "rgba(255, 234, 204, 0.16)";
-    ctx.lineWidth = 1;
+    drawRoundedPanel(24, 20, 374, 142, 26, "rgba(39, 13, 8, 0.78)", "rgba(255, 232, 202, 0.14)");
+    ctx.fillStyle = "rgba(255, 191, 125, 0.14)";
     ctx.beginPath();
-    ctx.roundRect(24, 22, 360, 126, 24);
+    ctx.roundRect(24, 20, 374, 142, 26);
     ctx.fill();
-    ctx.stroke();
 
-    ctx.fillStyle = "#fff5e6";
-    ctx.font = "800 20px Manrope";
-    ctx.fillText(`Wave ${state.wave}`, 44, 56);
-    ctx.font = "700 16px Manrope";
-    ctx.fillStyle = "rgba(255,245,230,0.76)";
-    ctx.fillText(`Time ${state.runTime.toFixed(0)}s`, 44, 82);
-    ctx.fillText(`Kills ${state.kills}`, 156, 82);
-    ctx.fillText(`Score ${state.score}`, 244, 82);
+    ctx.fillStyle = "#fff3df";
+    ctx.font = "800 16px Manrope";
+    ctx.fillText("HARVEST STATUS", 44, 48);
+    ctx.font = "800 28px Alegreya";
+    ctx.fillText(`Wave ${state.wave}`, 44, 78);
+    ctx.font = "700 14px Manrope";
+    ctx.fillStyle = "rgba(255,245,230,0.74)";
+    ctx.fillText(`Time ${state.runTime.toFixed(0)}s`, 44, 106);
+    ctx.fillText(`Kills ${state.kills}`, 128, 106);
+    ctx.fillText(`Score ${state.score}`, 206, 106);
+    ctx.fillText(`Level ${state.level}`, 304, 106);
 
-    ctx.fillStyle = "rgba(255,255,255,0.12)";
+    ctx.fillStyle = "rgba(255,255,255,0.1)";
     ctx.beginPath();
-    ctx.roundRect(44, 98, 300, 16, 999);
+    ctx.roundRect(44, 120, 312, 16, 999);
     ctx.fill();
-    ctx.fillStyle = "#ff8762";
+    const hpBar = ctx.createLinearGradient(44, 0, 356, 0);
+    hpBar.addColorStop(0, "#ff8a63");
+    hpBar.addColorStop(1, "#ffcc70");
+    ctx.fillStyle = hpBar;
     ctx.beginPath();
-    ctx.roundRect(44, 98, 300 * (player.hp / player.maxHp), 16, 999);
+    ctx.roundRect(44, 120, 312 * (player.hp / player.maxHp), 16, 999);
     ctx.fill();
-    ctx.fillStyle = "#fff5e6";
-    ctx.font = "700 13px Manrope";
-    ctx.fillText(`HP ${Math.ceil(player.hp)} / ${player.maxHp}`, 48, 111);
+    ctx.fillStyle = "#fff7eb";
+    ctx.font = "700 12px Manrope";
+    ctx.fillText(`HP ${Math.ceil(player.hp)} / ${player.maxHp}`, 50, 132);
 
-    ctx.fillStyle = "rgba(255,255,255,0.12)";
+    ctx.fillStyle = "rgba(255,255,255,0.09)";
     ctx.beginPath();
-    ctx.roundRect(44, 122, 300, 10, 999);
+    ctx.roundRect(44, 144, 312, 10, 999);
     ctx.fill();
-    ctx.fillStyle = "#ffd966";
+    const xpBar = ctx.createLinearGradient(44, 0, 356, 0);
+    xpBar.addColorStop(0, "#ffe474");
+    xpBar.addColorStop(1, "#fff2b1");
+    ctx.fillStyle = xpBar;
     ctx.beginPath();
-    ctx.roundRect(44, 122, 300 * (player.xp / player.xpToLevel), 10, 999);
+    ctx.roundRect(44, 144, 312 * (player.xp / player.xpToLevel), 10, 999);
     ctx.fill();
-    ctx.fillStyle = "rgba(255,245,230,0.78)";
-    ctx.fillText(`Level ${state.level}`, 48, 142);
 
     if (state.messageTimer > 0) {
-      const label = state.bossAlive ? "Boss incoming" : state.mode === "playing" ? `Harvest wave ${state.wave}` : "Upgrade chosen";
+      const label = state.bossAlive ? "Boss harvest incoming" : state.mode === "playing" ? `Wave ${state.wave} surges` : "Upgrade secured";
       ctx.textAlign = "center";
       ctx.font = "800 30px Alegreya";
-      ctx.fillStyle = "rgba(74, 23, 4, 0.26)";
-      ctx.fillText(label, WIDTH / 2 + 2, 82);
+      ctx.fillStyle = "rgba(74, 23, 4, 0.28)";
+      ctx.fillText(label, WIDTH / 2 + 2, 84);
       ctx.fillStyle = "#fff8dd";
-      ctx.fillText(label, WIDTH / 2, 78);
+      ctx.fillText(label, WIDTH / 2, 80);
       ctx.textAlign = "left";
     }
     ctx.restore();
@@ -920,6 +1065,383 @@
     ctx.fillStyle = "#fff8eb";
     ctx.font = "600 18px Manrope";
     ctx.fillText("再来一局，看看这次能不能把构筑滚起来。", WIDTH / 2, 492);
+    ctx.textAlign = "left";
+  }
+
+  function drawEntities(camera) {
+    ctx.save();
+    ctx.translate(HALF_W - camera.x, HALF_H - camera.y);
+
+    for (const pickup of state.pickups) {
+      const bob = Math.sin(pickup.phase) * 4;
+      drawShadow(pickup.x, pickup.y + 18, 14, 8, 0.22);
+      ctx.fillStyle = "rgba(255, 234, 151, 0.22)";
+      ctx.beginPath();
+      ctx.arc(pickup.x, pickup.y + bob, pickup.radius * 1.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#fff3b0";
+      ctx.beginPath();
+      ctx.arc(pickup.x, pickup.y + bob, pickup.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#fffbe1";
+      ctx.beginPath();
+      ctx.arc(pickup.x - 3, pickup.y - 3 + bob, pickup.radius * 0.45, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    for (const projectile of state.projectiles) {
+      drawShadow(projectile.x, projectile.y + 13, 14, 7, 0.18);
+      ctx.fillStyle = `hsla(${projectile.hue} 100% 70% / 0.2)`;
+      ctx.beginPath();
+      ctx.arc(projectile.x, projectile.y, projectile.radius * 1.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = `hsl(${projectile.hue} 100% 70%)`;
+      ctx.beginPath();
+      ctx.arc(projectile.x, projectile.y, projectile.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,0.6)";
+      ctx.beginPath();
+      ctx.arc(projectile.x - 3, projectile.y - 3, projectile.radius * 0.45, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    for (const enemy of state.enemies) {
+      drawShadow(enemy.x, enemy.y + enemy.radius * 0.72, enemy.radius * 0.8, enemy.radius * 0.36, 0.2);
+      const enemyGradient = ctx.createRadialGradient(
+        enemy.x - enemy.radius * 0.28,
+        enemy.y - enemy.radius * 0.3,
+        enemy.radius * 0.2,
+        enemy.x,
+        enemy.y,
+        enemy.radius * 1.15
+      );
+      enemyGradient.addColorStop(0, enemy.hitFlash > 0 ? "#fff8e1" : "#d8f59f");
+      enemyGradient.addColorStop(0.45, enemy.hitFlash > 0 ? "#fff1cb" : enemy.color);
+      enemyGradient.addColorStop(1, enemy.kind === "boss" ? "#1c0d09" : "rgba(31, 14, 8, 0.86)");
+      ctx.fillStyle = enemyGradient;
+      ctx.beginPath();
+      ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(33, 12, 8, 0.32)";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.fillStyle = "rgba(255, 241, 218, 0.18)";
+      ctx.beginPath();
+      ctx.arc(enemy.x - enemy.radius * 0.26, enemy.y - enemy.radius * 0.22, enemy.radius * 0.42, 0, Math.PI * 2);
+      ctx.fill();
+
+      const eyeOffset = enemy.kind === "boss" ? 12 : 7;
+      drawEye(enemy.x - eyeOffset, enemy.y - 4, 4);
+      drawEye(enemy.x + eyeOffset, enemy.y - 4, 4);
+
+      if (enemy.kind === "boss") {
+        ctx.strokeStyle = "rgba(255, 226, 179, 0.36)";
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.arc(enemy.x, enemy.y, enemy.radius + 10 + Math.sin(state.time * 4) * 4, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = "rgba(255, 205, 142, 0.14)";
+        ctx.beginPath();
+        ctx.arc(enemy.x, enemy.y, enemy.radius + 18, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.strokeStyle = "rgba(61, 31, 10, 0.48)";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(enemy.x, enemy.y + enemy.radius * 0.14, enemy.radius * 0.35, 0.25, Math.PI - 0.25);
+        ctx.stroke();
+      }
+
+      const hpWidth = enemy.radius * 1.7;
+      ctx.fillStyle = "rgba(24, 9, 4, 0.35)";
+      ctx.beginPath();
+      ctx.roundRect(enemy.x - hpWidth / 2, enemy.y - enemy.radius - 18, hpWidth, 6, 999);
+      ctx.fill();
+      ctx.fillStyle = enemy.kind === "boss" ? "#ffd479" : "#a7ef7d";
+      ctx.beginPath();
+      ctx.roundRect(enemy.x - hpWidth / 2, enemy.y - enemy.radius - 18, hpWidth * (enemy.hp / enemy.maxHp), 6, 999);
+      ctx.fill();
+    }
+
+    const player = state.player;
+    drawShadow(player.x, player.y + player.radius + 12, player.radius, player.radius * 0.44, 0.24);
+    const playerGradient = ctx.createRadialGradient(player.x - 10, player.y - 18, 4, player.x, player.y, player.radius * 1.15);
+    playerGradient.addColorStop(0, player.invuln > 0 ? "#fffdf1" : "#ffdfa3");
+    playerGradient.addColorStop(0.4, player.invuln > 0 ? "#fff2cb" : "#d8a460");
+    playerGradient.addColorStop(1, "#7f4d2c");
+    ctx.fillStyle = playerGradient;
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(64, 23, 11, 0.35)";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.fillStyle = "#f8e3b5";
+    ctx.beginPath();
+    ctx.arc(player.x - 10, player.y - 10, player.radius * 0.44, 0, Math.PI * 2);
+    ctx.fill();
+    drawEye(player.x - 8, player.y - 2, 5);
+    drawEye(player.x + 8, player.y - 2, 5);
+    ctx.strokeStyle = "#3b2016";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.arc(player.x, player.y + 4, 11, 0.2, Math.PI - 0.2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "#5d2f19";
+    ctx.lineWidth = 12;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(player.x - Math.cos(player.aimAngle) * 4, player.y - Math.sin(player.aimAngle) * 4);
+    ctx.lineTo(player.x + Math.cos(player.aimAngle) * 38, player.y + Math.sin(player.aimAngle) * 38);
+    ctx.stroke();
+    ctx.strokeStyle = "#f3c577";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(player.x + Math.cos(player.aimAngle) * 10, player.y + Math.sin(player.aimAngle) * 10);
+    ctx.lineTo(player.x + Math.cos(player.aimAngle) * 34, player.y + Math.sin(player.aimAngle) * 34);
+    ctx.stroke();
+
+    if (player.fireCooldown > player.fireRate * 0.7) {
+      ctx.fillStyle = "rgba(255, 212, 118, 0.45)";
+      ctx.beginPath();
+      ctx.arc(player.x + Math.cos(player.aimAngle) * 42, player.y + Math.sin(player.aimAngle) * 42, 12, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    for (let o = 0; o < player.orbitals; o += 1) {
+      const angle = state.time * 2.6 + (Math.PI * 2 * o) / Math.max(1, player.orbitals);
+      const ox = player.x + Math.cos(angle) * 72;
+      const oy = player.y + Math.sin(angle) * 72;
+      drawShadow(ox, oy + 10, 16, 7, 0.16);
+      ctx.fillStyle = "rgba(255, 200, 96, 0.22)";
+      ctx.beginPath();
+      ctx.arc(ox, oy, 18, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#ffcb60";
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - 16);
+      ctx.lineTo(ox + 11, oy);
+      ctx.lineTo(ox, oy + 16);
+      ctx.lineTo(ox - 11, oy);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "#fff2c9";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    for (const particle of state.particles) {
+      const alpha = clamp(particle.life / particle.maxLife, 0, 1);
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = particle.color;
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size * alpha, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    ctx.restore();
+  }
+
+  function drawHud() {
+    const player = state.player;
+    ctx.save();
+    drawRoundedPanel(24, 20, 374, 142, 26, "rgba(39, 13, 8, 0.78)", "rgba(255, 232, 202, 0.14)");
+    ctx.fillStyle = "rgba(255, 191, 125, 0.14)";
+    ctx.beginPath();
+    ctx.roundRect(24, 20, 374, 142, 26);
+    ctx.fill();
+
+    ctx.fillStyle = "#fff3df";
+    ctx.font = "800 16px Manrope";
+    ctx.fillText("HARVEST STATUS", 44, 48);
+    ctx.font = "800 28px Alegreya";
+    ctx.fillText(`Wave ${state.wave}`, 44, 78);
+    ctx.font = "700 14px Manrope";
+    ctx.fillStyle = "rgba(255,245,230,0.74)";
+    ctx.fillText(`Time ${state.runTime.toFixed(0)}s`, 44, 106);
+    ctx.fillText(`Kills ${state.kills}`, 128, 106);
+    ctx.fillText(`Score ${state.score}`, 206, 106);
+    ctx.fillText(`Level ${state.level}`, 304, 106);
+
+    ctx.fillStyle = "rgba(255,255,255,0.1)";
+    ctx.beginPath();
+    ctx.roundRect(44, 120, 312, 16, 999);
+    ctx.fill();
+    const hpBar = ctx.createLinearGradient(44, 0, 356, 0);
+    hpBar.addColorStop(0, "#ff8a63");
+    hpBar.addColorStop(1, "#ffcc70");
+    ctx.fillStyle = hpBar;
+    ctx.beginPath();
+    ctx.roundRect(44, 120, 312 * (player.hp / player.maxHp), 16, 999);
+    ctx.fill();
+    ctx.fillStyle = "#fff7eb";
+    ctx.font = "700 12px Manrope";
+    ctx.fillText(`HP ${Math.ceil(player.hp)} / ${player.maxHp}`, 50, 132);
+
+    ctx.fillStyle = "rgba(255,255,255,0.09)";
+    ctx.beginPath();
+    ctx.roundRect(44, 144, 312, 10, 999);
+    ctx.fill();
+    const xpBar = ctx.createLinearGradient(44, 0, 356, 0);
+    xpBar.addColorStop(0, "#ffe474");
+    xpBar.addColorStop(1, "#fff2b1");
+    ctx.fillStyle = xpBar;
+    ctx.beginPath();
+    ctx.roundRect(44, 144, 312 * (player.xp / player.xpToLevel), 10, 999);
+    ctx.fill();
+
+    if (state.messageTimer > 0) {
+      const label = state.bossAlive ? "Boss harvest incoming" : state.mode === "playing" ? `Wave ${state.wave} surges` : "Upgrade secured";
+      ctx.textAlign = "center";
+      ctx.font = "800 30px Alegreya";
+      ctx.fillStyle = "rgba(74, 23, 4, 0.28)";
+      ctx.fillText(label, WIDTH / 2 + 2, 84);
+      ctx.fillStyle = "#fff8dd";
+      ctx.fillText(label, WIDTH / 2, 80);
+      ctx.textAlign = "left";
+    }
+    ctx.restore();
+  }
+
+  function drawMenu() {
+    drawBackground({ x: WORLD.width / 2, y: WORLD.height / 2 });
+    ctx.fillStyle = "rgba(19, 7, 4, 0.56)";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    drawRoundedPanel(148, 82, WIDTH - 296, HEIGHT - 164, 36, "rgba(55, 18, 9, 0.9)", "rgba(255, 223, 184, 0.16)");
+    ctx.fillStyle = "rgba(255, 191, 126, 0.08)";
+    ctx.beginPath();
+    ctx.roundRect(148, 82, WIDTH - 296, HEIGHT - 164, 36);
+    ctx.fill();
+
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#ffd37f";
+    ctx.font = "800 20px Manrope";
+    ctx.fillText("Garden Run", WIDTH / 2, 154);
+    ctx.fillStyle = "#fff8eb";
+    ctx.font = "800 96px Alegreya";
+    ctx.fillText("Spud Arena", WIDTH / 2, 248);
+    ctx.font = "600 26px Manrope";
+    ctx.fillStyle = "rgba(255, 246, 228, 0.82)";
+    ctx.fillText("Auto-fire. Dodge hard. Build fast.", WIDTH / 2, 304);
+    ctx.font = "600 17px Manrope";
+    ctx.fillStyle = "rgba(255, 238, 213, 0.72)";
+    ctx.fillText("A condensed survival run with cleaner rhythm and a heavier arcade look.", WIDTH / 2, 336);
+
+    ctx.textAlign = "left";
+    const tips = [
+      "Move with WASD or the arrow keys",
+      "XP cores vacuum in when you get close",
+      "Use 1, 2, 3 or click to take upgrades",
+      "Press F to toggle fullscreen",
+      "Every third wave can spawn a boss harvest"
+    ];
+    ctx.font = "700 20px Manrope";
+    for (let i = 0; i < tips.length; i += 1) {
+      const y = 398 + i * 40;
+      ctx.fillStyle = "rgba(255, 222, 162, 0.88)";
+      ctx.fillText("•", 272, y);
+      ctx.fillStyle = "#fff8eb";
+      ctx.fillText(tips[i], 302, y);
+    }
+
+    const pulse = 0.5 + Math.sin(state.time * 3.2) * 0.5;
+    ctx.fillStyle = `rgba(255, 146, 71, ${0.24 + pulse * 0.18})`;
+    ctx.beginPath();
+    ctx.roundRect(WIDTH / 2 - 200, HEIGHT - 180, 400, 80, 999);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255, 219, 154, 0.42)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = "#fff8eb";
+    ctx.font = "800 26px Manrope";
+    ctx.textAlign = "center";
+    ctx.fillText("Click anywhere to start the harvest", WIDTH / 2, HEIGHT - 130);
+    ctx.textAlign = "left";
+  }
+
+  function drawLevelUp() {
+    drawHud();
+    ctx.fillStyle = "rgba(29, 10, 5, 0.58)";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#ffd78a";
+    ctx.font = "800 26px Manrope";
+    ctx.fillText("Level Up", WIDTH / 2, 120);
+    ctx.fillStyle = "#fff8eb";
+    ctx.font = "800 58px Alegreya";
+    ctx.fillText("Choose Your Upgrade", WIDTH / 2, 180);
+    ctx.font = "600 20px Manrope";
+    ctx.fillStyle = "rgba(255,247,232,0.78)";
+    ctx.fillText("Press 1, 2, 3 or click a card", WIDTH / 2, 220);
+
+    const top = 282;
+    const cardWidth = 280;
+    const gap = 32;
+    const left = (WIDTH - (cardWidth * 3 + gap * 2)) / 2;
+    state.upgradeChoices.forEach((choice, index) => {
+      const x = left + index * (cardWidth + gap);
+      const hovered = pointer.x >= x && pointer.x <= x + cardWidth && pointer.y >= top && pointer.y <= top + 260;
+      ctx.fillStyle = hovered ? "rgba(115, 48, 20, 0.98)" : "rgba(61, 25, 13, 0.92)";
+      ctx.strokeStyle = hovered ? "rgba(255, 213, 133, 0.76)" : "rgba(255, 232, 204, 0.16)";
+      ctx.lineWidth = hovered ? 2 : 1;
+      ctx.beginPath();
+      ctx.roundRect(x, top, cardWidth, 260, 28);
+      ctx.fill();
+      ctx.stroke();
+      if (hovered) {
+        ctx.fillStyle = "rgba(255, 205, 133, 0.08)";
+        ctx.beginPath();
+        ctx.roundRect(x, top, cardWidth, 260, 28);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = "#ffd78a";
+      ctx.font = "800 16px Manrope";
+      ctx.fillText(`${index + 1}`, x + 30, top + 38);
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#fff8eb";
+      ctx.font = "800 34px Alegreya";
+      ctx.fillText(choice.title, x + 28, top + 90);
+      ctx.fillStyle = "rgba(255, 220, 166, 0.9)";
+      ctx.font = "800 16px Manrope";
+      ctx.fillText(choice.subtitle, x + 28, top + 122);
+      ctx.fillStyle = "rgba(255, 247, 232, 0.78)";
+      ctx.font = "600 18px Manrope";
+      const lines = wrapText(choice.detail, 216);
+      lines.forEach((line, lineIndex) => {
+        ctx.fillText(line, x + 28, top + 168 + lineIndex * 28);
+      });
+      ctx.textAlign = "center";
+    });
+    ctx.textAlign = "left";
+  }
+
+  function drawGameOver() {
+    drawHud();
+    ctx.fillStyle = "rgba(24, 9, 5, 0.64)";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#fff0da";
+    ctx.font = "800 72px Alegreya";
+    ctx.fillText("Harvest Lost", WIDTH / 2, 250);
+    ctx.font = "700 24px Manrope";
+    ctx.fillStyle = "rgba(255,247,232,0.82)";
+    ctx.fillText(`You reached wave ${state.wave} and knocked out ${state.kills} enemies`, WIDTH / 2, 314);
+    ctx.fillText("Click anywhere to jump back in", WIDTH / 2, 356);
+
+    ctx.fillStyle = "rgba(61, 25, 13, 0.92)";
+    ctx.beginPath();
+    ctx.roundRect(WIDTH / 2 - 190, 408, 380, 106, 28);
+    ctx.fill();
+    ctx.fillStyle = "#ffd78a";
+    ctx.font = "800 20px Manrope";
+    ctx.fillText(`Final score ${state.score}`, WIDTH / 2, 458);
+    ctx.fillStyle = "#fff8eb";
+    ctx.font = "600 18px Manrope";
+    ctx.fillText("Reset, reroll your upgrades, and try to build a nastier run.", WIDTH / 2, 492);
     ctx.textAlign = "left";
   }
 

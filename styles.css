@@ -1,13 +1,15 @@
 :root {
-  --bg-top: #f6d9b3;
-  --bg-bottom: #d57b52;
-  --card: rgba(52, 24, 12, 0.78);
-  --card-border: rgba(255, 233, 191, 0.3);
-  --text-main: #fff7e8;
-  --text-dim: rgba(255, 247, 232, 0.72);
-  --accent: #ffd166;
-  --accent-strong: #ff8c42;
-  --shadow: rgba(38, 14, 6, 0.32);
+  --bg-sky: #f4dfc2;
+  --bg-heat: #eb9a5d;
+  --bg-dusk: #7b311a;
+  --panel: rgba(45, 17, 10, 0.82);
+  --panel-border: rgba(255, 230, 191, 0.2);
+  --text-main: #fff7eb;
+  --text-dim: rgba(255, 245, 231, 0.74);
+  --accent: #ffd77f;
+  --accent-strong: #ff9357;
+  --line: rgba(255, 237, 211, 0.14);
+  --shadow: rgba(39, 13, 5, 0.34);
 }
 
 * {
@@ -24,8 +26,10 @@ body {
   font-family: "Manrope", "Segoe UI", sans-serif;
   color: var(--text-main);
   background:
-    radial-gradient(circle at top, rgba(255, 244, 224, 0.55), transparent 34%),
-    linear-gradient(180deg, var(--bg-top) 0%, #efb26e 30%, #d57b52 100%);
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.46), transparent 18%),
+    radial-gradient(circle at 82% 14%, rgba(255, 211, 153, 0.3), transparent 20%),
+    linear-gradient(180deg, var(--bg-sky) 0%, var(--bg-heat) 34%, var(--bg-dusk) 100%);
+  overflow-x: hidden;
 }
 
 body::before,
@@ -38,25 +42,25 @@ body::after {
 
 body::before {
   background:
-    radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.3), transparent 18%),
-    radial-gradient(circle at 85% 15%, rgba(255, 224, 182, 0.26), transparent 14%),
-    radial-gradient(circle at 78% 82%, rgba(132, 75, 33, 0.18), transparent 18%);
+    radial-gradient(circle at 30% 24%, rgba(255, 246, 231, 0.18), transparent 26%),
+    radial-gradient(circle at 70% 78%, rgba(83, 23, 8, 0.22), transparent 22%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 45%);
   mix-blend-mode: screen;
 }
 
 body::after {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 24px 24px;
-  opacity: 0.18;
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.22;
 }
 
 .app-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: minmax(280px, 420px) minmax(720px, 1fr);
-  gap: 28px;
+  grid-template-columns: minmax(320px, 430px) minmax(720px, 1fr);
+  gap: 30px;
   align-items: center;
   padding: 28px;
 }
@@ -66,36 +70,41 @@ body::after {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 28px;
-  border-radius: 28px;
-  background: linear-gradient(180deg, rgba(90, 38, 18, 0.84), rgba(49, 18, 9, 0.8));
-  border: 1px solid var(--card-border);
-  box-shadow: 0 24px 80px var(--shadow);
-  backdrop-filter: blur(10px);
+  gap: 0;
+  padding: 30px;
+  border-radius: 30px;
+  background:
+    linear-gradient(180deg, rgba(91, 31, 12, 0.92), rgba(52, 17, 8, 0.86)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 35%);
+  border: 1px solid var(--panel-border);
+  box-shadow:
+    0 28px 80px var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
 }
 
 .eyebrow {
   margin: 0 0 10px;
   color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 0.24em;
-  font-size: 0.75rem;
+  letter-spacing: 0.28em;
+  font-size: 0.74rem;
   font-weight: 800;
 }
 
 .hero-copy h1 {
   margin: 0;
   font-family: "Alegreya", Georgia, serif;
-  font-size: clamp(3.2rem, 7vw, 5rem);
-  line-height: 0.95;
-  letter-spacing: -0.04em;
+  font-size: clamp(3.5rem, 8vw, 5.2rem);
+  line-height: 0.92;
+  letter-spacing: -0.05em;
 }
 
 .lede {
   margin: 18px 0 0;
   max-width: 26rem;
-  font-size: 1.02rem;
-  line-height: 1.7;
+  font-size: 1.04rem;
+  line-height: 1.75;
   color: var(--text-dim);
 }
 
@@ -103,16 +112,56 @@ body::after {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 24px;
+  margin-top: 26px;
 }
 
 .feature-list span,
 .panel-footer span {
-  padding: 10px 14px;
+  padding: 11px 15px;
   border-radius: 999px;
-  background: rgba(255, 244, 224, 0.12);
-  border: 1px solid rgba(255, 240, 214, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: rgba(255, 244, 224, 0.11);
+  border: 1px solid rgba(255, 240, 214, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.callout {
+  margin-top: 24px;
+  display: grid;
+  gap: 8px;
+  padding: 18px 18px 16px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 180, 115, 0.16), rgba(255, 117, 46, 0.12));
+  border: 1px solid rgba(255, 209, 138, 0.16);
+}
+
+.callout strong {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.callout code,
+.callout a {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.callout code {
+  width: fit-content;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(22, 7, 3, 0.34);
+  color: var(--text-main);
+}
+
+.callout a {
+  color: #ffe7b4;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.callout a:hover {
+  color: #fff5de;
 }
 
 .game-panel {
@@ -125,11 +174,11 @@ body::after {
   width: 100%;
   max-width: 1280px;
   aspect-ratio: 16 / 9;
-  border-radius: 30px;
-  border: 1px solid rgba(255, 236, 214, 0.22);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 236, 214, 0.18);
   box-shadow:
-    0 32px 90px rgba(58, 22, 10, 0.32),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    0 36px 100px rgba(57, 20, 8, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
   background: #20110b;
   display: block;
 }
@@ -138,7 +187,7 @@ body::after {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  color: rgba(255, 247, 232, 0.92);
+  color: rgba(255, 247, 232, 0.94);
   font-size: 0.92rem;
 }
 
@@ -146,10 +195,6 @@ body::after {
   .app-shell {
     grid-template-columns: 1fr;
     padding: 20px;
-  }
-
-  .hero-copy {
-    padding: 24px;
   }
 }
 
@@ -160,6 +205,11 @@ body::after {
   }
 
   .hero-copy {
+    border-radius: 24px;
+    padding: 24px;
+  }
+
+  #game {
     border-radius: 24px;
   }
 

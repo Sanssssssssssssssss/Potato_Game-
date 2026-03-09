@@ -8,3 +8,5 @@ Original prompt: 目前这是一个空文件夹，我需要你写一个游戏并
 - Added `README.md`, `.gitignore`, and `test-actions.json` for repo hygiene and reproducible checks.
 - Added `package.json` plus `.vscode/tasks.json` and `.vscode/launch.json` so the project can be run directly from VSCode via `npm run dev` or `F5`.
 - Repository has been pushed to GitHub, including merge to `main`.
+- Switched the local server entry to `serve.py` so terminal output includes a direct clickable URL for the game.
+- Started a stronger polish pass on presentation: cleaner outer layout copy, richer gradients, improved HUD styling, better entity lighting, and more intentional menu/upgrade presentation.

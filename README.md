@@ -26,6 +26,14 @@ Then open:
 http://127.0.0.1:4173/index.html
 ```
 
+The terminal now prints:
+
+```text
+Open the game here: http://127.0.0.1:4173/index.html
+```
+
+In VSCode's terminal this URL should be clickable.
+
 If `npm` is not recognized in an already-open terminal, close that terminal and open a new one in VSCode. This workspace includes `.vscode/settings.json` to inject `C:\Program Files\nodejs` into the terminal PATH.
 
 ### Option 1B: Fallback Without npm

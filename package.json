@@ -4,7 +4,7 @@
   "private": true,
   "description": "A simplified Brotato-style survival game that runs as a static web app.",
   "scripts": {
-    "dev": "py -m http.server 4173",
-    "start": "py -m http.server 4173"
+    "dev": "py serve.py",
+    "start": "py serve.py"
   }
 }

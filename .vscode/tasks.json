@@ -6,9 +6,7 @@
       "type": "shell",
       "command": "py",
       "args": [
-        "-m",
-        "http.server",
-        "4173"
+        "serve.py"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -27,7 +25,7 @@
         "background": {
           "activeOnStart": true,
           "beginsPattern": ".",
-          "endsPattern": "Serving HTTP on"
+          "endsPattern": "Open the game here:"
         }
       }
     }

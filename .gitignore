@@ -2,3 +2,6 @@ output/
 node_modules/
 .DS_Store
 Thumbs.db
+__pycache__/
+.codex-dev.log
+.codex-dev.err
