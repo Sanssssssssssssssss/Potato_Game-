@@ -89,6 +89,22 @@ Main launcher:
 release/Spud Arena-win32-x64/Spud Arena.exe
 ```
 
+## Build A Single-File EXE
+
+If you want to send one file to another Windows user, build the self-extracting package:
+
+```powershell
+npm run build:single-exe
+```
+
+Output:
+
+```text
+release/Spud-Arena-1.0.0-single-file.exe
+```
+
+This file can be sent directly to another Windows x64 machine. When launched, it extracts to a temporary folder, starts the game, and then exits back to a single-file distribution flow.
+
 ## Run With Docker
 
 ### Build The Image

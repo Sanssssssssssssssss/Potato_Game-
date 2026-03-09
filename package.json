@@ -11,6 +11,7 @@
     "desktop": "electron .",
     "build:desktop": "electron-packager . \"Spud Arena\" --platform=win32 --arch=x64 --out=release --overwrite --ignore=\"^(output|release|\\.git|\\.vscode)$\"",
     "build:win": "electron-packager . \"Spud Arena\" --platform=win32 --arch=x64 --out=release --overwrite --ignore=\"^(output|release|\\.git|\\.vscode)$\"",
+    "build:single-exe": "powershell -ExecutionPolicy Bypass -File .\\scripts\\build-single-exe.ps1",
     "docker:build": "docker build -t spud-arena .",
     "docker:run": "docker run --rm -p 4173:4173 spud-arena"
   },

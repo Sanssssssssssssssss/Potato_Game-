@@ -21,3 +21,4 @@ Original prompt: 目前这是一个空文件夹，我需要你写一个游戏并
 - Rewrote the README to document browser play, EXE packaging, Docker startup, and the cleaner UI decision.
 - Verified browser flow after the UI cleanup with the Playwright web-game client and an additional direct Playwright capture; no console/page errors were emitted and the menu still transitions into gameplay.
 - Docker CLI is not installed on this machine, so the container files were added and reviewed but not executed locally.
+- Added `scripts/build-single-exe.ps1` plus `npm run build:single-exe` to generate a single self-extracting Windows EXE for easier sharing; verified the packaged file launches and spawns the Electron game from a temp directory.
