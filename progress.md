@@ -13,3 +13,4 @@ Original prompt: 目前这是一个空文件夹，我需要你写一个游戏并
 - Promoted verified gameplay screenshots into `assets/readme/` and rewrote `README.md` into a more game-like landing page with visual sections instead of a plain setup doc.
 - Reworked the entry layout with a stronger split-screen shell, added persistent run settings, and implemented Chinese/English switching plus difficulty/detail/shake controls.
 - Added menu-side configuration summaries, decorative sickle motifs, and richer world props so the battlefield and title screen feel less placeholder-like.
+- Fixed the oversized desktop layout ratio by shrinking the sidebar share and letting the canvas expand across the remaining width instead of capping at 1280px.
