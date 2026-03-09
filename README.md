@@ -26,6 +26,16 @@ Then open:
 http://127.0.0.1:4173/index.html
 ```
 
+If `npm` is not recognized in an already-open terminal, close that terminal and open a new one in VSCode. This workspace includes `.vscode/settings.json` to inject `C:\Program Files\nodejs` into the terminal PATH.
+
+### Option 1B: Fallback Without npm
+
+If you want a startup command that does not depend on Node PATH at all:
+
+```powershell
+.\run-game.ps1
+```
+
 ### Option 2: VSCode Run Button
 
 This repo now includes:
