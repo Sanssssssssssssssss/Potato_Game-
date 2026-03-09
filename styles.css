@@ -1,14 +1,14 @@
 :root {
   --bg-sky: #f4dfc2;
-  --bg-heat: #eb9a5d;
-  --bg-dusk: #7b311a;
-  --panel: rgba(45, 17, 10, 0.82);
-  --panel-border: rgba(255, 230, 191, 0.2);
+  --bg-heat: #e79157;
+  --bg-dusk: #662513;
+  --panel: rgba(43, 15, 8, 0.86);
+  --panel-soft: rgba(64, 24, 13, 0.78);
+  --panel-border: rgba(255, 224, 186, 0.16);
   --text-main: #fff7eb;
-  --text-dim: rgba(255, 245, 231, 0.74);
+  --text-dim: rgba(255, 242, 225, 0.74);
   --accent: #ffd77f;
   --accent-strong: #ff9357;
-  --line: rgba(255, 237, 211, 0.14);
   --shadow: rgba(39, 13, 5, 0.34);
 }
 
@@ -26,7 +26,7 @@ body {
   font-family: "Manrope", "Segoe UI", sans-serif;
   color: var(--text-main);
   background:
-    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.46), transparent 18%),
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.46), transparent 18%),
     radial-gradient(circle at 82% 14%, rgba(255, 211, 153, 0.3), transparent 20%),
     linear-gradient(180deg, var(--bg-sky) 0%, var(--bg-heat) 34%, var(--bg-dusk) 100%);
   overflow-x: hidden;
@@ -42,9 +42,9 @@ body::after {
 
 body::before {
   background:
-    radial-gradient(circle at 30% 24%, rgba(255, 246, 231, 0.18), transparent 26%),
-    radial-gradient(circle at 70% 78%, rgba(83, 23, 8, 0.22), transparent 22%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 45%);
+    radial-gradient(circle at 24% 24%, rgba(255, 248, 234, 0.18), transparent 20%),
+    radial-gradient(circle at 74% 76%, rgba(95, 27, 8, 0.22), transparent 22%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.07), transparent 45%);
   mix-blend-mode: screen;
 }
 
@@ -59,35 +59,55 @@ body::after {
 .app-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: minmax(320px, 430px) minmax(720px, 1fr);
-  gap: 30px;
-  align-items: center;
-  padding: 28px;
+  grid-template-columns: minmax(340px, 420px) minmax(760px, 1fr);
+  gap: 28px;
+  align-items: start;
+  padding: 24px;
+}
+
+.side-rail {
+  display: grid;
+  gap: 18px;
+}
+
+.hero-copy,
+.config-card,
+.sigil-card,
+.launch-card {
+  border-radius: 28px;
+  border: 1px solid var(--panel-border);
+  background:
+    linear-gradient(180deg, rgba(90, 30, 12, 0.92), rgba(50, 16, 8, 0.88)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 36%);
+  box-shadow:
+    0 26px 80px var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
 }
 
 .hero-copy {
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0;
   padding: 30px;
-  border-radius: 30px;
-  background:
-    linear-gradient(180deg, rgba(91, 31, 12, 0.92), rgba(52, 17, 8, 0.86)),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 35%);
-  border: 1px solid var(--panel-border);
-  box-shadow:
-    0 28px 80px var(--shadow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
 }
 
-.eyebrow {
+.config-card,
+.launch-card {
+  padding: 22px;
+}
+
+.sigil-card {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 18px;
+  align-items: center;
+  padding: 22px;
+}
+
+.eyebrow,
+.section-kicker {
   margin: 0 0 10px;
   color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.24em;
   font-size: 0.74rem;
   font-weight: 800;
 }
@@ -95,72 +115,136 @@ body::after {
 .hero-copy h1 {
   margin: 0;
   font-family: "Alegreya", Georgia, serif;
-  font-size: clamp(3.5rem, 8vw, 5.2rem);
+  font-size: clamp(3.4rem, 8vw, 5.3rem);
   line-height: 0.92;
   letter-spacing: -0.05em;
 }
 
-.lede {
-  margin: 18px 0 0;
-  max-width: 26rem;
-  font-size: 1.04rem;
-  line-height: 1.75;
+.hero-copy h2,
+.config-card h2,
+.sigil-card h2 {
+  margin: 0;
+  font-family: "Alegreya", Georgia, serif;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.lede,
+#sigil-body,
+#launch-hint {
+  margin: 16px 0 0;
   color: var(--text-dim);
+  line-height: 1.72;
 }
 
 .feature-list {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 26px;
+  margin-top: 24px;
 }
 
 .feature-list span,
-.panel-footer span {
+.panel-footer span,
+.chip-button {
   padding: 11px 15px;
   border-radius: 999px;
   background: rgba(255, 244, 224, 0.11);
-  border: 1px solid rgba(255, 240, 214, 0.09);
+  border: 1px solid rgba(255, 240, 214, 0.1);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.callout {
-  margin-top: 24px;
+.section-head {
+  margin-bottom: 16px;
+}
+
+.config-group + .config-group {
+  margin-top: 16px;
+}
+
+.config-label {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(255, 242, 225, 0.84);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.chip-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.chip-button {
+  color: var(--text-main);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.chip-button:hover,
+.chip-button.is-active {
+  transform: translateY(-1px);
+  background: rgba(255, 162, 89, 0.18);
+  border-color: rgba(255, 214, 156, 0.34);
+}
+
+.config-select {
+  width: 100%;
+  border: 1px solid rgba(255, 226, 188, 0.14);
+  border-radius: 16px;
+  background: rgba(27, 9, 5, 0.4);
+  color: var(--text-main);
+  padding: 12px 14px;
+  font: inherit;
+  font-weight: 700;
+  outline: none;
+}
+
+.config-select:focus {
+  border-color: rgba(255, 214, 156, 0.42);
+}
+
+.sigil-art {
   display: grid;
-  gap: 8px;
-  padding: 18px 18px 16px;
+  place-items: center;
+  min-height: 220px;
   border-radius: 22px;
-  background: linear-gradient(180deg, rgba(255, 180, 115, 0.16), rgba(255, 117, 46, 0.12));
-  border: 1px solid rgba(255, 209, 138, 0.16);
+  background: radial-gradient(circle at center, rgba(255, 214, 144, 0.12), transparent 60%);
 }
 
-.callout strong {
-  color: var(--accent);
-  font-size: 0.9rem;
+.sigil-art svg {
+  width: 100%;
+  max-width: 220px;
+  display: block;
 }
 
-.callout code,
-.callout a {
+.launch-card code,
+.launch-card a {
   font-family: "Manrope", sans-serif;
   font-weight: 700;
-  font-size: 0.98rem;
 }
 
-.callout code {
-  width: fit-content;
+.launch-card code {
+  display: inline-block;
+  margin-top: 8px;
   padding: 8px 12px;
   border-radius: 12px;
   background: rgba(22, 7, 3, 0.34);
   color: var(--text-main);
 }
 
-.callout a {
+.launch-card a {
+  display: inline-block;
+  margin-top: 12px;
   color: #ffe7b4;
   text-decoration: none;
   word-break: break-all;
 }
 
-.callout a:hover {
+.launch-card a:hover {
   color: #fff5de;
 }
 
@@ -170,15 +254,26 @@ body::after {
   gap: 14px;
 }
 
+.canvas-shell {
+  position: relative;
+  padding: 12px;
+  border-radius: 36px;
+  background:
+    linear-gradient(180deg, rgba(88, 31, 13, 0.66), rgba(41, 13, 7, 0.7)),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.07), transparent 35%);
+  border: 1px solid rgba(255, 232, 202, 0.12);
+  box-shadow: 0 36px 100px rgba(57, 20, 8, 0.4);
+}
+
 #game {
   width: 100%;
   max-width: 1280px;
   aspect-ratio: 16 / 9;
-  border-radius: 32px;
-  border: 1px solid rgba(255, 236, 214, 0.18);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 236, 214, 0.16);
   box-shadow:
-    0 36px 100px rgba(57, 20, 8, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 20px 60px rgba(22, 7, 4, 0.28);
   background: #20110b;
   display: block;
 }
@@ -191,29 +286,50 @@ body::after {
   font-size: 0.92rem;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1280px) {
   .app-shell {
     grid-template-columns: 1fr;
-    padding: 20px;
   }
-}
 
-@media (max-width: 720px) {
-  .app-shell {
-    gap: 18px;
-    padding: 14px;
+  .side-rail {
+    grid-template-columns: 1fr 1fr;
   }
 
   .hero-copy {
+    grid-column: 1 / -1;
+  }
+
+  .launch-card {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 840px) {
+  .app-shell {
+    padding: 14px;
+  }
+
+  .side-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .sigil-card {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy,
+  .config-card,
+  .sigil-card,
+  .launch-card {
     border-radius: 24px;
-    padding: 24px;
+  }
+
+  .canvas-shell {
+    padding: 8px;
+    border-radius: 24px;
   }
 
   #game {
-    border-radius: 24px;
-  }
-
-  .panel-footer {
-    font-size: 0.82rem;
+    border-radius: 20px;
   }
 }

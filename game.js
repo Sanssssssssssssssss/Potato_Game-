@@ -15,6 +15,300 @@
   let lastFrame = performance.now();
   let rafId = 0;
 
+  const ui = {
+    heroEyebrow: document.getElementById("hero-eyebrow"),
+    heroLede: document.getElementById("hero-lede"),
+    featureList: document.getElementById("feature-list"),
+    configKicker: document.getElementById("config-kicker"),
+    configTitle: document.getElementById("config-title"),
+    languageLabel: document.getElementById("language-label"),
+    difficultyLabel: document.getElementById("difficulty-label"),
+    detailLabel: document.getElementById("detail-label"),
+    shakeLabel: document.getElementById("shake-label"),
+    difficultySelect: document.getElementById("difficulty-select"),
+    detailSelect: document.getElementById("detail-select"),
+    shakeSelect: document.getElementById("shake-select"),
+    languageButtons: [...document.querySelectorAll("[data-language]")],
+    sigilKicker: document.getElementById("sigil-kicker"),
+    sigilTitle: document.getElementById("sigil-title"),
+    sigilBody: document.getElementById("sigil-body"),
+    launchKicker: document.getElementById("launch-kicker"),
+    launchHint: document.getElementById("launch-hint"),
+    footerMove: document.getElementById("footer-move"),
+    footerUpgrade: document.getElementById("footer-upgrade"),
+    footerFullscreen: document.getElementById("footer-fullscreen")
+  };
+
+  const SETTINGS_KEY = "spud-arena-settings-v3";
+  const defaultSettings = {
+    language: "en",
+    difficulty: "normal",
+    detail: "lush",
+    shake: "on"
+  };
+
+  const difficultyProfiles = {
+    relaxed: { spawnRate: 0.82, hp: 0.9, speed: 0.94, damage: 0.88, xp: 1.12 },
+    normal: { spawnRate: 1, hp: 1, speed: 1, damage: 1, xp: 1 },
+    brutal: { spawnRate: 1.18, hp: 1.16, speed: 1.08, damage: 1.14, xp: 0.95 }
+  };
+
+  const text = {
+    en: {
+      heroEyebrow: "Arcade Survival",
+      heroLede: "A compact Brotato-inspired arena shooter with more control over the run. Tune the language, pressure, and field density before you step into the harvest.",
+      features: ["Auto-fire combat", "Bilingual UI", "Flexible difficulty", "Boss harvests"],
+      configKicker: "Flexible Setup",
+      configTitle: "Run Configuration",
+      languageLabel: "Language",
+      languageOptions: {
+        en: "English",
+        zh: "Chinese"
+      },
+      difficultyLabel: "Difficulty",
+      detailLabel: "Field detail",
+      shakeLabel: "Screen shake",
+      difficultyOptions: {
+        relaxed: "Relaxed",
+        normal: "Normal",
+        brutal: "Brutal"
+      },
+      detailOptions: {
+        lush: "Lush",
+        clean: "Minimal"
+      },
+      shakeOptions: {
+        on: "On",
+        off: "Off"
+      },
+      sigilKicker: "Harvest Sigil",
+      sigilTitle: "Sickle And Wheat",
+      sigilBody: "The field now opens with a stronger ritual frame, a cleaner control layout, and more ornamental harvest motifs so the game looks closer to a complete arcade piece.",
+      launchKicker: "Quick Launch",
+      launchHint: "Use the terminal command, or hit F5 in VSCode. The run link prints directly in the terminal.",
+      footerMove: "Move: WASD / Arrow Keys",
+      footerUpgrade: "Upgrade: 1 / 2 / 3 or click",
+      footerFullscreen: "Fullscreen: F",
+      menu: {
+        kicker: "Harvest Ritual",
+        title: "Spud Arena",
+        tagline: "Auto-fire. Dodge hard. Build fast.",
+        subline: "Tune the run in the sidebar, then dive into the field.",
+        tipsTitle: "Field Notes",
+        start: "Click anywhere or press Enter to begin",
+        configTitle: "Active Loadout",
+        language: "Language",
+        difficulty: "Difficulty",
+        detail: "Field",
+        shake: "Shake"
+      },
+      hudStatus: "HARVEST STATUS",
+      waveLabel: "Wave",
+      timeLabel: "Time",
+      killsLabel: "Kills",
+      scoreLabel: "Score",
+      levelLabel: "Level",
+      hpLabel: "HP",
+      bossIncoming: "Boss harvest incoming",
+      waveSurges: (wave) => `Wave ${wave} surges`,
+      upgradeSecured: "Upgrade secured",
+      levelUp: {
+        eyebrow: "Level Up",
+        title: "Choose Your Upgrade",
+        hint: "Press 1, 2, 3 or click a card"
+      },
+      gameOver: {
+        title: "Harvest Lost",
+        line: (wave, kills) => `You reached wave ${wave} and knocked out ${kills} enemies`,
+        hint: "Click anywhere to jump back in",
+        score: (score) => `Final score ${score}`,
+        subline: "Reset, reroll your upgrades, and try to build a nastier run."
+      },
+      upgrades: {
+        "rapid-fire": { title: "Clockwork Oil", subtitle: "Attack speed", detail: "Fire interval is reduced by 18%." },
+        "heavy-rounds": { title: "Packed Rounds", subtitle: "Damage boost", detail: "Projectiles deal 12 more damage." },
+        "greased-boots": { title: "Butter Slide", subtitle: "Move speed", detail: "Movement speed increases by 12%." },
+        "wide-burst": { title: "Twin Burst", subtitle: "Firepower", detail: "Shoot one additional potato shot each volley." },
+        "hot-soup": { title: "Hot Soup", subtitle: "Recovery", detail: "Gain 20 max HP and heal 20 immediately." },
+        "sniper-salt": { title: "Sniper Salt", subtitle: "Projectile speed", detail: "Shots travel 18% faster and reach farther." },
+        "thresher-ring": { title: "Thresher Ring", subtitle: "Orbiting blade", detail: "Summon a rotating blade around the hero." }
+      }
+    },
+    zh: {
+      heroEyebrow: "生存街机",
+      heroLede: "这是一个受土豆兄弟启发的紧凑型生存射击游戏，现在可以在开局前自由调整语言、压力等级和地图细节，让每一局更灵活。",
+      features: ["自动射击战斗", "中英双语", "难度可调", "Boss 波次"],
+      configKicker: "灵活配置",
+      configTitle: "开局设置",
+      languageLabel: "语言",
+      languageOptions: {
+        en: "英文",
+        zh: "中文"
+      },
+      difficultyLabel: "难度",
+      detailLabel: "地图细节",
+      shakeLabel: "震屏效果",
+      difficultyOptions: {
+        relaxed: "轻松",
+        normal: "标准",
+        brutal: "残酷"
+      },
+      detailOptions: {
+        lush: "丰富",
+        clean: "简洁"
+      },
+      shakeOptions: {
+        on: "开启",
+        off: "关闭"
+      },
+      sigilKicker: "收割纹章",
+      sigilTitle: "镰刀与麦穗",
+      sigilBody: "首屏现在加入了更完整的仪式感布局、可切换配置和更明显的收割主题装饰，让它更像一个完整的街机游戏，而不是单纯的测试画面。",
+      launchKicker: "快速启动",
+      launchHint: "可以在终端运行命令，也可以在 VSCode 里按 F5。游戏地址会直接打印在终端里。",
+      footerMove: "移动：WASD / 方向键",
+      footerUpgrade: "升级：1 / 2 / 3 或点击",
+      footerFullscreen: "全屏：F",
+      menu: {
+        kicker: "收割仪式",
+        title: "Spud Arena",
+        tagline: "自动开火，灵活走位，快速成型。",
+        subline: "先在左侧调整这局的配置，再踏进这片收割场。",
+        tipsTitle: "开局提示",
+        start: "点击任意位置或按 Enter 开始",
+        configTitle: "当前配置",
+        language: "语言",
+        difficulty: "难度",
+        detail: "地图",
+        shake: "震屏"
+      },
+      hudStatus: "战局状态",
+      waveLabel: "波次",
+      timeLabel: "时间",
+      killsLabel: "击败",
+      scoreLabel: "分数",
+      levelLabel: "等级",
+      hpLabel: "生命",
+      bossIncoming: "Boss 波次来袭",
+      waveSurges: (wave) => `第 ${wave} 波正在加强`,
+      upgradeSecured: "升级已生效",
+      levelUp: {
+        eyebrow: "升级",
+        title: "选择你的强化",
+        hint: "按 1、2、3 或直接点击卡片"
+      },
+      gameOver: {
+        title: "收割失败",
+        line: (wave, kills) => `你撑到了第 ${wave} 波，并击败了 ${kills} 个敌人`,
+        hint: "点击任意位置重新开始",
+        score: (score) => `最终分数 ${score}`,
+        subline: "重开一局，换一种构筑方式再试试看。"
+      },
+      upgrades: {
+        "rapid-fire": { title: "齿轮润滑", subtitle: "攻速强化", detail: "射击间隔缩短 18%。" },
+        "heavy-rounds": { title: "压实弹丸", subtitle: "伤害强化", detail: "子弹伤害提高 12 点。" },
+        "greased-boots": { title: "滚烫黄油", subtitle: "移速强化", detail: "移动速度提升 12%。" },
+        "wide-burst": { title: "双发发射", subtitle: "火力强化", detail: "每轮额外发射 1 枚子弹。" },
+        "hot-soup": { title: "热汤补给", subtitle: "续航强化", detail: "最大生命 +20，并立刻回复 20 点生命。" },
+        "sniper-salt": { title: "海盐瞄具", subtitle: "弹速强化", detail: "子弹速度提升 18%，射程同步增加。" },
+        "thresher-ring": { title: "旋耕护环", subtitle: "环绕刀片", detail: "生成一枚环绕角色旋转的刀片。" }
+      }
+    }
+  };
+
+  function loadSettings() {
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(SETTINGS_KEY) || "{}");
+      return {
+        ...defaultSettings,
+        ...parsed
+      };
+    } catch {
+      return { ...defaultSettings };
+    }
+  }
+
+  let settings = loadSettings();
+
+  function saveSettings() {
+    window.localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  }
+
+  function getPack() {
+    return text[settings.language] || text.en;
+  }
+
+  function getDifficultyProfile(key = settings.difficulty) {
+    return difficultyProfiles[key] || difficultyProfiles.normal;
+  }
+
+  function getUpgradeCopy(id) {
+    const pack = getPack();
+    return pack.upgrades[id] || text.en.upgrades[id];
+  }
+
+  function getOptionLabel(group, value) {
+    const pack = getPack();
+    return pack[group]?.[value] || text.en[group]?.[value] || value;
+  }
+
+  function updateStaticUi() {
+    const pack = getPack();
+    document.documentElement.lang = settings.language === "zh" ? "zh-CN" : "en";
+    document.title = pack.menu.title;
+    ui.heroEyebrow.textContent = pack.heroEyebrow;
+    ui.heroLede.textContent = pack.heroLede;
+    ui.configKicker.textContent = pack.configKicker;
+    ui.configTitle.textContent = pack.configTitle;
+    ui.languageLabel.textContent = pack.languageLabel;
+    ui.difficultyLabel.textContent = pack.difficultyLabel;
+    ui.detailLabel.textContent = pack.detailLabel;
+    ui.shakeLabel.textContent = pack.shakeLabel;
+    ui.sigilKicker.textContent = pack.sigilKicker;
+    ui.sigilTitle.textContent = pack.sigilTitle;
+    ui.sigilBody.textContent = pack.sigilBody;
+    ui.launchKicker.textContent = pack.launchKicker;
+    ui.launchHint.textContent = pack.launchHint;
+    ui.footerMove.textContent = pack.footerMove;
+    ui.footerUpgrade.textContent = pack.footerUpgrade;
+    ui.footerFullscreen.textContent = pack.footerFullscreen;
+
+    ui.featureList.innerHTML = "";
+    for (const feature of pack.features) {
+      const chip = document.createElement("span");
+      chip.textContent = feature;
+      ui.featureList.appendChild(chip);
+    }
+
+    for (const option of ui.difficultySelect.options) {
+      option.textContent = getOptionLabel("difficultyOptions", option.value);
+    }
+    for (const option of ui.detailSelect.options) {
+      option.textContent = getOptionLabel("detailOptions", option.value);
+    }
+    for (const option of ui.shakeSelect.options) {
+      option.textContent = getOptionLabel("shakeOptions", option.value);
+    }
+
+    ui.difficultySelect.value = settings.difficulty;
+    ui.detailSelect.value = settings.detail;
+    ui.shakeSelect.value = settings.shake;
+    for (const button of ui.languageButtons) {
+      button.classList.toggle("is-active", button.dataset.language === settings.language);
+    }
+  }
+
+  function applySettings(patch) {
+    settings = { ...settings, ...patch };
+    saveSettings();
+    updateStaticUi();
+    if (state.mode === "menu" || state.mode === "gameover") {
+      state = createState();
+      state.mode = "menu";
+    }
+    draw();
+  }
+
   const upgradeCatalog = [
     {
       id: "rapid-fire",
@@ -84,6 +378,7 @@
   ];
 
   function createState() {
+    const difficulty = getDifficultyProfile();
     return {
       mode: "menu",
       time: 0,
@@ -124,7 +419,9 @@
       bossAlive: false,
       spawnBank: 0,
       nextWaveAt: 18,
-      worldPulse: 0
+      worldPulse: 0,
+      difficulty,
+      decor: generateDecor(settings.detail)
     };
   }
 
@@ -155,14 +452,15 @@
   }
 
   function wrapText(text, maxWidth) {
-    const words = text.split(" ");
+    const units = text.includes(" ") ? text.split(" ") : Array.from(text);
     const lines = [];
     let line = "";
-    for (const word of words) {
-      const test = line ? `${line} ${word}` : word;
+    for (const unit of units) {
+      const spacer = text.includes(" ") && line ? " " : "";
+      const test = `${line}${spacer}${unit}`;
       if (ctx.measureText(test).width > maxWidth && line) {
         lines.push(line);
-        line = word;
+        line = unit;
       } else {
         line = test;
       }
@@ -209,6 +507,7 @@
       boss: { radius: 58, speed: 74, hp: 360, color: "#3d271c", xp: 80, damage: 24 }
     };
     const preset = presets[kind];
+    const profile = state.difficulty;
     state.enemies.push({
       kind,
       x,
@@ -216,12 +515,12 @@
       vx: 0,
       vy: 0,
       radius: preset.radius,
-      speed: preset.speed + state.wave * (kind === "boss" ? 6 : 3),
-      hp: preset.hp + state.wave * (kind === "boss" ? 42 : 8),
-      maxHp: preset.hp + state.wave * (kind === "boss" ? 42 : 8),
+      speed: (preset.speed + state.wave * (kind === "boss" ? 6 : 3)) * profile.speed,
+      hp: (preset.hp + state.wave * (kind === "boss" ? 42 : 8)) * profile.hp,
+      maxHp: (preset.hp + state.wave * (kind === "boss" ? 42 : 8)) * profile.hp,
       color: preset.color,
-      xp: preset.xp,
-      damage: preset.damage,
+      xp: Math.round(preset.xp * profile.xp),
+      damage: preset.damage * profile.damage,
       hitFlash: 0
     });
     if (kind === "boss") {
@@ -325,7 +624,8 @@
       fireProjectile(offset);
     }
     player.fireCooldown = player.fireRate;
-    state.cameraShake = Math.min(10, state.cameraShake + 2.4);
+    const shakeMult = settings.shake === "on" ? 1 : 0.18;
+    state.cameraShake = Math.min(10, state.cameraShake + 2.4 * shakeMult);
   }
 
   function collectXp() {
@@ -403,7 +703,7 @@
 
     tryAutoShoot();
 
-    state.spawnBank += dt * (1.6 + state.wave * 0.28);
+    state.spawnBank += dt * (1.6 + state.wave * 0.28) * state.difficulty.spawnRate;
     while (state.spawnBank >= 1) {
       state.spawnBank -= 1;
       const roll = Math.random();
@@ -481,7 +781,7 @@
       if (distance(enemy, player) < enemy.radius + player.radius + 6 && player.invuln <= 0) {
         player.hp -= enemy.damage;
         player.invuln = 0.65;
-        state.cameraShake = 18;
+        state.cameraShake = settings.shake === "on" ? 18 : 3;
         emitParticles(player.x, player.y, "#fff0db", 18, 260);
         if (player.hp <= 0) {
           player.hp = 0;
@@ -549,7 +849,7 @@
   function getCamera() {
     const targetX = clamp(state.player.x, HALF_W, WORLD.width - HALF_W);
     const targetY = clamp(state.player.y, HALF_H, WORLD.height - HALF_H);
-    const shake = state.cameraShake;
+    const shake = settings.shake === "on" ? state.cameraShake : state.cameraShake * 0.15;
     return {
       x: targetX + rand(-shake, shake),
       y: targetY + rand(-shake, shake)
@@ -575,6 +875,169 @@
     ctx.beginPath();
     ctx.arc(x - size * 0.22, y - size * 0.22, size * 0.28, 0, Math.PI * 2);
     ctx.fill();
+  }
+
+  function generateDecor(detail) {
+    const lush = detail === "lush";
+    const props = [];
+    const count = lush ? 140 : 72;
+    for (let i = 0; i < count; i += 1) {
+      const roll = Math.random();
+      const type =
+        roll < 0.22 ? "hay" :
+        roll < 0.4 ? "lantern" :
+        roll < 0.58 ? "crate" :
+        roll < 0.78 ? "scarecrow" :
+        roll < 0.92 ? "rock" :
+        "sickle";
+      props.push({
+        type,
+        x: rand(100, WORLD.width - 100),
+        y: rand(100, WORLD.height - 100),
+        scale: rand(0.75, 1.35),
+        phase: rand(0, Math.PI * 2)
+      });
+    }
+    return props;
+  }
+
+  function drawSickleSigil(x, y, scale, glowAlpha) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+
+    ctx.fillStyle = `rgba(255, 206, 129, ${glowAlpha})`;
+    ctx.beginPath();
+    ctx.arc(0, 0, 52, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#f4cf8a";
+    ctx.beginPath();
+    ctx.arc(-6, -4, 34, -1.1, 1.15, false);
+    ctx.arc(14, -2, 22, 1.2, -1.2, true);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#fff0c6";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.strokeStyle = "#6d351d";
+    ctx.lineWidth = 8;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(-10, 20);
+    ctx.lineTo(26, -26);
+    ctx.stroke();
+
+    ctx.strokeStyle = "#ffd68f";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(-46, -12);
+    ctx.quadraticCurveTo(-58, 8, -54, 34);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(44, -8);
+    ctx.quadraticCurveTo(56, 10, 54, 34);
+    ctx.stroke();
+    for (let i = 0; i < 3; i += 1) {
+      const offset = -6 + i * 18;
+      ctx.beginPath();
+      ctx.moveTo(-48, offset);
+      ctx.lineTo(-64, offset - 6);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(48, offset);
+      ctx.lineTo(64, offset - 6);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  function drawWorldProp(prop) {
+    ctx.save();
+    ctx.translate(prop.x, prop.y);
+    ctx.scale(prop.scale, prop.scale);
+
+    if (prop.type === "hay") {
+      drawShadow(0, 18, 22, 8, 0.14);
+      ctx.fillStyle = "#dba75f";
+      ctx.beginPath();
+      ctx.roundRect(-18, -12, 36, 24, 8);
+      ctx.fill();
+      ctx.strokeStyle = "#c7853d";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(-12, -11);
+      ctx.lineTo(-12, 11);
+      ctx.moveTo(0, -11);
+      ctx.lineTo(0, 11);
+      ctx.moveTo(12, -11);
+      ctx.lineTo(12, 11);
+      ctx.stroke();
+    } else if (prop.type === "lantern") {
+      drawShadow(0, 20, 18, 7, 0.12);
+      ctx.strokeStyle = "#6b361e";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(0, 18);
+      ctx.lineTo(0, -10);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(255, 227, 144, 0.18)";
+      ctx.beginPath();
+      ctx.arc(0, -14, 20, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#ffe8a7";
+      ctx.beginPath();
+      ctx.arc(0, -14, 8, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (prop.type === "crate") {
+      drawShadow(0, 18, 20, 7, 0.14);
+      ctx.fillStyle = "#8b512f";
+      ctx.beginPath();
+      ctx.roundRect(-16, -14, 32, 28, 6);
+      ctx.fill();
+      ctx.strokeStyle = "#c88b57";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(-12, -10, 24, 20);
+      ctx.beginPath();
+      ctx.moveTo(-16, -14);
+      ctx.lineTo(16, 14);
+      ctx.moveTo(16, -14);
+      ctx.lineTo(-16, 14);
+      ctx.stroke();
+    } else if (prop.type === "scarecrow") {
+      drawShadow(0, 24, 18, 7, 0.12);
+      ctx.strokeStyle = "#6b361e";
+      ctx.lineWidth = 7;
+      ctx.beginPath();
+      ctx.moveTo(0, 24);
+      ctx.lineTo(0, -10);
+      ctx.moveTo(-18, 0);
+      ctx.lineTo(18, -6);
+      ctx.stroke();
+      ctx.fillStyle = "#d5a15d";
+      ctx.beginPath();
+      ctx.arc(0, -18, 12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#a44d2a";
+      ctx.fillRect(-14, 0, 28, 18);
+    } else if (prop.type === "rock") {
+      drawShadow(0, 16, 18, 7, 0.1);
+      ctx.fillStyle = "#7e5b4a";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 16, 12, 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,0.12)";
+      ctx.beginPath();
+      ctx.arc(-4, -3, 4, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (prop.type === "sickle") {
+      drawShadow(0, 20, 22, 8, 0.14);
+      drawSickleSigil(0, 0, 0.36, 0.08);
+    }
+
+    ctx.restore();
   }
 
   function drawBackground(camera) {
@@ -669,6 +1132,17 @@
         ctx.quadraticCurveTo(x + sway, y - 8, x + sway * 0.4, y - 24);
         ctx.stroke();
       }
+    }
+
+    const left = camera.x - HALF_W - 120;
+    const right = camera.x + HALF_W + 120;
+    const top = camera.y - HALF_H - 120;
+    const bottom = camera.y + HALF_H + 120;
+    for (const prop of state.decor) {
+      if (prop.x < left || prop.x > right || prop.y < top || prop.y > bottom) {
+        continue;
+      }
+      drawWorldProp(prop);
     }
 
     for (const splat of state.splats) {
@@ -1445,19 +1919,246 @@
     ctx.textAlign = "left";
   }
 
+  function drawConfigRow(label, value, x, y, width) {
+    ctx.fillStyle = "rgba(255, 243, 224, 0.08)";
+    ctx.beginPath();
+    ctx.roundRect(x, y, width, 38, 14);
+    ctx.fill();
+    ctx.fillStyle = "rgba(255, 224, 176, 0.78)";
+    ctx.font = "700 14px Manrope";
+    ctx.fillText(label, x + 14, y + 24);
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#fff8eb";
+    ctx.fillText(value, x + width - 14, y + 24);
+    ctx.textAlign = "left";
+  }
+
+  function renderHud() {
+    const player = state.player;
+    const pack = getPack();
+    ctx.save();
+    drawRoundedPanel(24, 20, 390, 150, 26, "rgba(39, 13, 8, 0.78)", "rgba(255, 232, 202, 0.14)");
+    ctx.fillStyle = "rgba(255, 191, 125, 0.14)";
+    ctx.beginPath();
+    ctx.roundRect(24, 20, 390, 150, 26);
+    ctx.fill();
+
+    ctx.fillStyle = "#fff3df";
+    ctx.font = "800 16px Manrope";
+    ctx.fillText(pack.hudStatus, 44, 48);
+    ctx.font = "800 28px Alegreya";
+    ctx.fillText(`${pack.waveLabel} ${state.wave}`, 44, 78);
+    ctx.font = "700 14px Manrope";
+    ctx.fillStyle = "rgba(255,245,230,0.74)";
+    ctx.fillText(`${pack.timeLabel} ${state.runTime.toFixed(0)}s`, 44, 106);
+    ctx.fillText(`${pack.killsLabel} ${state.kills}`, 144, 106);
+    ctx.fillText(`${pack.scoreLabel} ${state.score}`, 238, 106);
+    ctx.fillText(`${pack.levelLabel} ${state.level}`, 330, 106);
+
+    ctx.fillStyle = "rgba(255,255,255,0.1)";
+    ctx.beginPath();
+    ctx.roundRect(44, 120, 320, 16, 999);
+    ctx.fill();
+    const hpBar = ctx.createLinearGradient(44, 0, 364, 0);
+    hpBar.addColorStop(0, "#ff8a63");
+    hpBar.addColorStop(1, "#ffcc70");
+    ctx.fillStyle = hpBar;
+    ctx.beginPath();
+    ctx.roundRect(44, 120, 320 * (player.hp / player.maxHp), 16, 999);
+    ctx.fill();
+    ctx.fillStyle = "#fff7eb";
+    ctx.font = "700 12px Manrope";
+    ctx.fillText(`${pack.hpLabel} ${Math.ceil(player.hp)} / ${player.maxHp}`, 50, 132);
+
+    ctx.fillStyle = "rgba(255,255,255,0.09)";
+    ctx.beginPath();
+    ctx.roundRect(44, 144, 320, 10, 999);
+    ctx.fill();
+    const xpBar = ctx.createLinearGradient(44, 0, 364, 0);
+    xpBar.addColorStop(0, "#ffe474");
+    xpBar.addColorStop(1, "#fff2b1");
+    ctx.fillStyle = xpBar;
+    ctx.beginPath();
+    ctx.roundRect(44, 144, 320 * (player.xp / player.xpToLevel), 10, 999);
+    ctx.fill();
+
+    if (state.messageTimer > 0) {
+      const label = state.bossAlive ? pack.bossIncoming : state.mode === "playing" ? pack.waveSurges(state.wave) : pack.upgradeSecured;
+      ctx.textAlign = "center";
+      ctx.font = "800 30px Alegreya";
+      ctx.fillStyle = "rgba(74, 23, 4, 0.28)";
+      ctx.fillText(label, WIDTH / 2 + 2, 84);
+      ctx.fillStyle = "#fff8dd";
+      ctx.fillText(label, WIDTH / 2, 80);
+      ctx.textAlign = "left";
+    }
+    ctx.restore();
+  }
+
+  function renderStartScreen() {
+    const pack = getPack();
+    drawBackground({ x: WORLD.width / 2, y: WORLD.height / 2 });
+    ctx.fillStyle = "rgba(18, 7, 4, 0.58)";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    drawRoundedPanel(92, 72, WIDTH - 184, HEIGHT - 144, 40, "rgba(52, 17, 9, 0.9)", "rgba(255, 223, 184, 0.16)");
+    ctx.fillStyle = "rgba(255, 184, 110, 0.06)";
+    ctx.beginPath();
+    ctx.roundRect(92, 72, WIDTH - 184, HEIGHT - 144, 40);
+    ctx.fill();
+
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#ffd37f";
+    ctx.font = "800 18px Manrope";
+    ctx.fillText(pack.menu.kicker, 144, 140);
+    ctx.fillStyle = "#fff8eb";
+    ctx.font = "800 92px Alegreya";
+    ctx.fillText(pack.menu.title, 140, 240);
+    ctx.font = "700 28px Manrope";
+    ctx.fillStyle = "rgba(255, 245, 229, 0.9)";
+    ctx.fillText(pack.menu.tagline, 144, 292);
+    ctx.font = "600 18px Manrope";
+    ctx.fillStyle = "rgba(255, 238, 213, 0.72)";
+    ctx.fillText(pack.menu.subline, 144, 330);
+
+    ctx.fillStyle = "#ffd37f";
+    ctx.font = "800 16px Manrope";
+    ctx.fillText(pack.menu.tipsTitle, 144, 396);
+    const tips = settings.language === "zh"
+      ? ["WASD 或方向键移动", "靠近经验核心自动吸附", "升级时可按 1 / 2 / 3 选择", "每三波可能出现 Boss"]
+      : ["Move with WASD or arrow keys", "XP cores vacuum in when close", "Use 1 / 2 / 3 to lock upgrades", "Boss pressure spikes every third wave"];
+    ctx.font = "700 19px Manrope";
+    for (let i = 0; i < tips.length; i += 1) {
+      const y = 438 + i * 38;
+      ctx.fillStyle = "rgba(255, 222, 162, 0.9)";
+      ctx.fillText("-", 144, y);
+      ctx.fillStyle = "#fff8eb";
+      ctx.fillText(tips[i], 166, y);
+    }
+
+    drawRoundedPanel(772, 130, 340, 270, 28, "rgba(71, 27, 14, 0.82)", "rgba(255, 222, 179, 0.14)");
+    ctx.fillStyle = "#ffd37f";
+    ctx.font = "800 16px Manrope";
+    ctx.fillText(pack.menu.configTitle, 798, 164);
+    drawConfigRow(pack.menu.language, getOptionLabel("languageOptions", settings.language) || (settings.language === "zh" ? "中文" : "English"), 798, 190, 288);
+    drawConfigRow(pack.menu.difficulty, getOptionLabel("difficultyOptions", settings.difficulty), 798, 238, 288);
+    drawConfigRow(pack.menu.detail, getOptionLabel("detailOptions", settings.detail), 798, 286, 288);
+    drawConfigRow(pack.menu.shake, getOptionLabel("shakeOptions", settings.shake), 798, 334, 288);
+
+    drawSickleSigil(948, 516, 1.18, 0.08);
+
+    const pulse = 0.5 + Math.sin(state.time * 3.2) * 0.5;
+    ctx.fillStyle = `rgba(255, 146, 71, ${0.24 + pulse * 0.18})`;
+    ctx.beginPath();
+    ctx.roundRect(WIDTH / 2 - 230, HEIGHT - 150, 460, 80, 999);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255, 219, 154, 0.42)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#fff8eb";
+    ctx.font = "800 26px Manrope";
+    ctx.fillText(pack.menu.start, WIDTH / 2, HEIGHT - 99);
+    ctx.textAlign = "left";
+  }
+
+  function renderUpgradeScreen() {
+    const pack = getPack();
+    renderHud();
+    ctx.fillStyle = "rgba(29, 10, 5, 0.62)";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#ffd78a";
+    ctx.font = "800 26px Manrope";
+    ctx.fillText(pack.levelUp.eyebrow, WIDTH / 2, 120);
+    ctx.fillStyle = "#fff8eb";
+    ctx.font = "800 58px Alegreya";
+    ctx.fillText(pack.levelUp.title, WIDTH / 2, 180);
+    ctx.font = "600 20px Manrope";
+    ctx.fillStyle = "rgba(255,247,232,0.78)";
+    ctx.fillText(pack.levelUp.hint, WIDTH / 2, 220);
+
+    const top = 282;
+    const cardWidth = 280;
+    const gap = 32;
+    const left = (WIDTH - (cardWidth * 3 + gap * 2)) / 2;
+    state.upgradeChoices.forEach((choice, index) => {
+      const x = left + index * (cardWidth + gap);
+      const copy = getUpgradeCopy(choice.id);
+      const hovered = pointer.x >= x && pointer.x <= x + cardWidth && pointer.y >= top && pointer.y <= top + 260;
+      ctx.fillStyle = hovered ? "rgba(115, 48, 20, 0.98)" : "rgba(61, 25, 13, 0.92)";
+      ctx.strokeStyle = hovered ? "rgba(255, 213, 133, 0.76)" : "rgba(255, 232, 204, 0.16)";
+      ctx.lineWidth = hovered ? 2 : 1;
+      ctx.beginPath();
+      ctx.roundRect(x, top, cardWidth, 260, 28);
+      ctx.fill();
+      ctx.stroke();
+      if (hovered) {
+        ctx.fillStyle = "rgba(255, 205, 133, 0.08)";
+        ctx.beginPath();
+        ctx.roundRect(x, top, cardWidth, 260, 28);
+        ctx.fill();
+      }
+      ctx.fillStyle = "#ffd78a";
+      ctx.font = "800 16px Manrope";
+      ctx.fillText(`${index + 1}`, x + 30, top + 38);
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#fff8eb";
+      ctx.font = "800 34px Alegreya";
+      ctx.fillText(copy.title, x + 28, top + 90);
+      ctx.fillStyle = "rgba(255, 220, 166, 0.9)";
+      ctx.font = "800 16px Manrope";
+      ctx.fillText(copy.subtitle, x + 28, top + 122);
+      ctx.fillStyle = "rgba(255, 247, 232, 0.78)";
+      ctx.font = "600 18px Manrope";
+      const lines = wrapText(copy.detail, 216);
+      lines.forEach((line, lineIndex) => {
+        ctx.fillText(line, x + 28, top + 168 + lineIndex * 28);
+      });
+      ctx.textAlign = "center";
+    });
+    ctx.textAlign = "left";
+  }
+
+  function renderGameOverScreen() {
+    const pack = getPack();
+    renderHud();
+    ctx.fillStyle = "rgba(24, 9, 5, 0.66)";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#fff0da";
+    ctx.font = "800 72px Alegreya";
+    ctx.fillText(pack.gameOver.title, WIDTH / 2, 250);
+    ctx.font = "700 24px Manrope";
+    ctx.fillStyle = "rgba(255,247,232,0.82)";
+    ctx.fillText(pack.gameOver.line(state.wave, state.kills), WIDTH / 2, 314);
+    ctx.fillText(pack.gameOver.hint, WIDTH / 2, 356);
+    ctx.fillStyle = "rgba(61, 25, 13, 0.92)";
+    ctx.beginPath();
+    ctx.roundRect(WIDTH / 2 - 190, 408, 380, 106, 28);
+    ctx.fill();
+    ctx.fillStyle = "#ffd78a";
+    ctx.font = "800 20px Manrope";
+    ctx.fillText(pack.gameOver.score(state.score), WIDTH / 2, 458);
+    ctx.fillStyle = "#fff8eb";
+    ctx.font = "600 18px Manrope";
+    ctx.fillText(pack.gameOver.subline, WIDTH / 2, 492);
+    ctx.textAlign = "left";
+  }
+
   function draw() {
     const camera = getCamera();
     drawBackground(camera);
     if (state.mode !== "menu") {
       drawEntities(camera);
-      drawHud();
+      renderHud();
     }
     if (state.mode === "menu") {
-      drawMenu();
+      renderStartScreen();
     } else if (state.mode === "levelup") {
-      drawLevelUp();
+      renderUpgradeScreen();
     } else if (state.mode === "gameover") {
-      drawGameOver();
+      renderGameOverScreen();
     }
   }
 
@@ -1520,6 +2221,22 @@
     }
   }
 
+  for (const button of ui.languageButtons) {
+    button.addEventListener("click", () => {
+      applySettings({ language: button.dataset.language });
+    });
+  }
+
+  ui.difficultySelect.addEventListener("change", (event) => {
+    applySettings({ difficulty: event.target.value });
+  });
+  ui.detailSelect.addEventListener("change", (event) => {
+    applySettings({ detail: event.target.value });
+  });
+  ui.shakeSelect.addEventListener("change", (event) => {
+    applySettings({ shake: event.target.value });
+  });
+
   window.addEventListener("keydown", (event) => {
     const key = event.key.toLowerCase();
     if (["arrowup", "arrowdown", "arrowleft", "arrowright", " ", "f", "1", "2", "3", "w", "a", "s", "d"].includes(key)) {
@@ -1566,6 +2283,7 @@
     const payload = {
       note: "origin=(0,0) at top-left; +x moves right; +y moves down",
       mode: state.mode,
+      settings,
       wave: state.wave,
       level: state.level,
       time: Number(state.runTime.toFixed(2)),
@@ -1607,6 +2325,7 @@
   };
 
   window.advanceTime = advanceTime;
+  updateStaticUi();
   draw();
   rafId = requestAnimationFrame(frame);
 

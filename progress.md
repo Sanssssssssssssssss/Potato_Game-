@@ -11,3 +11,5 @@ Original prompt: 目前这是一个空文件夹，我需要你写一个游戏并
 - Switched the local server entry to `serve.py` so terminal output includes a direct clickable URL for the game.
 - Started a stronger polish pass on presentation: cleaner outer layout copy, richer gradients, improved HUD styling, better entity lighting, and more intentional menu/upgrade presentation.
 - Promoted verified gameplay screenshots into `assets/readme/` and rewrote `README.md` into a more game-like landing page with visual sections instead of a plain setup doc.
+- Reworked the entry layout with a stronger split-screen shell, added persistent run settings, and implemented Chinese/English switching plus difficulty/detail/shake controls.
+- Added menu-side configuration summaries, decorative sickle motifs, and richer world props so the battlefield and title screen feel less placeholder-like.
