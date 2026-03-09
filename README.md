@@ -1,75 +1,82 @@
 # Spud Arena
 
-Spud Arena is a polished, no-build browser survival shooter inspired by Brotato.
+> A compact arcade survival shooter inspired by Brotato.
 
-## Features
+Spud Arena drops you into a scorched harvest field where a heavily armed potato automatically fires at incoming pests. Your job is simple: keep moving, survive the wave ramp, and stack upgrades fast enough to stay ahead of the swarm.
 
-- Auto-firing combat with smooth keyboard movement
-- Escalating waves with boss rounds
-- XP pickups and three-choice level-up cards
-- Fullscreen toggle on `F`
-- Deterministic hooks for browser automation: `window.render_game_to_text()` and `window.advanceTime(ms)`
+![Combat Screenshot](assets/readme/combat.png)
 
-## Run In VSCode
+## What It Feels Like
 
-### Option 1: Terminal
+- Auto-fire combat with movement-first survival
+- Tight wave escalation with boss harvest rounds
+- Three-card upgrade picks that push fast builds
+- Fullscreen-ready play loop for short arcade sessions
 
-Open the integrated terminal in VSCode and run:
+## Screens
+
+### Arena Combat
+
+The core run is built around weaving through lanes, vacuuming XP cores, and keeping your firing line clean while enemy density climbs.
+
+![Arena Combat](assets/readme/combat.png)
+
+### Upgrade Draft
+
+Each level-up pauses the action and gives you three cards, so the run can swing toward faster fire, heavier damage, more mobility, or orbital defense.
+
+![Upgrade Draft](assets/readme/upgrade.png)
+
+## Controls
+
+- `WASD` or arrow keys: move
+- Mouse click: start the run / click cards
+- `1 / 2 / 3`: choose an upgrade
+- `F`: toggle fullscreen
+
+## Quick Start
+
+### VSCode Terminal
 
 ```powershell
 npm run dev
 ```
 
-Then open:
-
-```text
-http://127.0.0.1:4173/index.html
-```
-
-The terminal now prints:
+The terminal prints:
 
 ```text
 Open the game here: http://127.0.0.1:4173/index.html
 ```
 
-In VSCode's terminal this URL should be clickable.
+Open that URL in your browser. In VSCode terminal it should be clickable.
 
-If `npm` is not recognized in an already-open terminal, close that terminal and open a new one in VSCode. This workspace includes `.vscode/settings.json` to inject `C:\Program Files\nodejs` into the terminal PATH.
+If `npm` is not recognized in an older terminal tab, close that tab and open a new one. This workspace injects `C:\Program Files\nodejs` into the terminal PATH through `.vscode/settings.json`.
 
-### Option 1B: Fallback Without npm
-
-If you want a startup command that does not depend on Node PATH at all:
+### Fallback
 
 ```powershell
 .\run-game.ps1
 ```
 
-### Option 2: VSCode Run Button
+### VSCode Run And Debug
 
-This repo now includes:
+This project includes:
 
 - `.vscode/tasks.json` to start the local server
 - `.vscode/launch.json` to open the game in Edge or Chrome
 
-In VSCode:
+Use `F5` with `Open Spud Arena (Edge)` or `Open Spud Arena (Chrome)`.
 
-1. Open the Run and Debug panel.
-2. Choose `Open Spud Arena (Edge)` or `Open Spud Arena (Chrome)`.
-3. Press `F5`.
+## Project Files
 
-VSCode will start the local server automatically and open the game URL.
+- `index.html`: page shell
+- `styles.css`: outer presentation and layout
+- `game.js`: gameplay, rendering, wave logic, and state hooks
+- `serve.py`: local dev server with direct launch URL output
+- `run-game.ps1`: simple PowerShell launcher
 
-## Controls
+## Technical Notes
 
-- `WASD` or arrow keys: move
-- `1 / 2 / 3`: choose upgrades
-- Mouse click: start game / pick upgrade cards
-- `F`: toggle fullscreen
-
-## Files
-
-- [index.html](/D:/GPT_Project/ArtGame/index.html): page shell
-- [styles.css](/D:/GPT_Project/ArtGame/styles.css): layout and presentation
-- [game.js](/D:/GPT_Project/ArtGame/game.js): gameplay, rendering, and state hooks
-- [package.json](/D:/GPT_Project/ArtGame/package.json): local run scripts
-- [test-actions.json](/D:/GPT_Project/ArtGame/test-actions.json): Playwright action burst used for verification
+- No build step required
+- Runs as a static browser game
+- Includes `window.render_game_to_text()` and `window.advanceTime(ms)` for deterministic browser testing

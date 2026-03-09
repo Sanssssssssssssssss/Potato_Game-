@@ -10,3 +10,4 @@ Original prompt: 目前这是一个空文件夹，我需要你写一个游戏并
 - Repository has been pushed to GitHub, including merge to `main`.
 - Switched the local server entry to `serve.py` so terminal output includes a direct clickable URL for the game.
 - Started a stronger polish pass on presentation: cleaner outer layout copy, richer gradients, improved HUD styling, better entity lighting, and more intentional menu/upgrade presentation.
+- Promoted verified gameplay screenshots into `assets/readme/` and rewrote `README.md` into a more game-like landing page with visual sections instead of a plain setup doc.
