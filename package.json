@@ -2,9 +2,20 @@
   "name": "spud-arena",
   "version": "1.0.0",
   "private": true,
+  "main": "desktop/main.js",
+  "author": "Sanssssssssssssssss",
   "description": "A simplified Brotato-style survival game that runs as a static web app.",
   "scripts": {
     "dev": "py serve.py",
-    "start": "py serve.py"
+    "start": "py serve.py",
+    "desktop": "electron .",
+    "build:desktop": "electron-packager . \"Spud Arena\" --platform=win32 --arch=x64 --out=release --overwrite --ignore=\"^(output|release|\\.git|\\.vscode)$\"",
+    "build:win": "electron-packager . \"Spud Arena\" --platform=win32 --arch=x64 --out=release --overwrite --ignore=\"^(output|release|\\.git|\\.vscode)$\"",
+    "docker:build": "docker build -t spud-arena .",
+    "docker:run": "docker run --rm -p 4173:4173 spud-arena"
+  },
+  "devDependencies": {
+    "@electron/packager": "^18.4.4",
+    "electron": "^37.2.0"
   }
 }

@@ -1,82 +1,132 @@
 # Spud Arena
 
-> A compact arcade survival shooter inspired by Brotato.
+> A compact harvest-survival shooter inspired by Brotato, wrapped for browser, desktop, and container play.
 
-Spud Arena drops you into a scorched harvest field where a heavily armed potato automatically fires at incoming pests. Your job is simple: keep moving, survive the wave ramp, and stack upgrades fast enough to stay ahead of the swarm.
+Spud Arena drops a battle-hardened potato into a scorched farm ring full of pests, elites, and boss harvest waves. The gun fires on its own. Your job is to stay alive, draft upgrades fast, and keep the field from swallowing the run.
 
-![Combat Screenshot](assets/readme/combat.png)
+![Arena Combat](assets/readme/combat.png)
 
-## What It Feels Like
+## Why It Feels Good
 
-- Auto-fire combat with movement-first survival
-- Tight wave escalation with boss harvest rounds
-- Three-card upgrade picks that push fast builds
-- Fullscreen-ready play loop for short arcade sessions
+- Auto-fire combat with movement-first survival pressure
+- Fast three-card upgrade drafting
+- Boss rounds that spike the tempo every few waves
+- Chinese and English UI switching with persistent run settings
+- Browser play, Windows desktop packaging, and Docker deployment in one repo
 
 ## Screens
 
 ### Arena Combat
 
-The core run is built around weaving through lanes, vacuuming XP cores, and keeping your firing line clean while enemy density climbs.
-
-![Arena Combat](assets/readme/combat.png)
+![Combat Screenshot](assets/readme/combat.png)
 
 ### Upgrade Draft
 
-Each level-up pauses the action and gives you three cards, so the run can swing toward faster fire, heavier damage, more mobility, or orbital defense.
-
-![Upgrade Draft](assets/readme/upgrade.png)
+![Upgrade Screenshot](assets/readme/upgrade.png)
 
 ## Controls
 
 - `WASD` or arrow keys: move
-- Mouse click: start the run / click cards
-- `1 / 2 / 3`: choose an upgrade
+- Mouse click or `Enter`: start the run
+- `1 / 2 / 3`: pick an upgrade
 - `F`: toggle fullscreen
 
-## Quick Start
+## Play In Browser
 
-### VSCode Terminal
+### Local Dev Server
 
 ```powershell
 npm run dev
 ```
 
-The terminal prints:
+Then open:
 
 ```text
-Open the game here: http://127.0.0.1:4173/index.html
+http://127.0.0.1:4173/index.html
 ```
 
-Open that URL in your browser. In VSCode terminal it should be clickable.
-
-If `npm` is not recognized in an older terminal tab, close that tab and open a new one. This workspace injects `C:\Program Files\nodejs` into the terminal PATH through `.vscode/settings.json`.
-
-### Fallback
+### PowerShell Fallback
 
 ```powershell
 .\run-game.ps1
 ```
 
-### VSCode Run And Debug
+### VSCode
 
-This project includes:
+Press `F5` and choose `Open Spud Arena (Edge)` or `Open Spud Arena (Chrome)`.
 
-- `.vscode/tasks.json` to start the local server
-- `.vscode/launch.json` to open the game in Edge or Chrome
+## Build A Windows EXE
 
-Use `F5` with `Open Spud Arena (Edge)` or `Open Spud Arena (Chrome)`.
+This project includes an Electron desktop wrapper, so you can package the game into a Windows app folder with a direct `.exe` launcher.
 
-## Project Files
+### Install Dependencies
 
-- `index.html`: page shell
-- `styles.css`: outer presentation and layout
-- `game.js`: gameplay, rendering, wave logic, and state hooks
-- `serve.py`: local dev server with direct launch URL output
-- `run-game.ps1`: simple PowerShell launcher
+```powershell
+npm install
+```
 
-## Technical Notes
+### Run The Desktop Version In Dev
 
-- No build step required
-- Runs as a static browser game
-- Includes `window.render_game_to_text()` and `window.advanceTime(ms)` for deterministic browser testing
+```powershell
+npm run desktop
+```
+
+### Build The Desktop EXE
+
+```powershell
+npm run build:win
+```
+
+The packaged desktop build is written into:
+
+```text
+release/
+```
+
+Main launcher:
+
+```text
+release/Spud Arena-win32-x64/Spud Arena.exe
+```
+
+## Run With Docker
+
+### Build The Image
+
+```powershell
+docker build -t spud-arena .
+```
+
+### Start The Container
+
+```powershell
+docker run --rm -p 4173:4173 spud-arena
+```
+
+Then open:
+
+```text
+http://127.0.0.1:4173
+```
+
+### Or With Docker Compose
+
+```powershell
+docker compose up --build
+```
+
+## Project Layout
+
+- `index.html`: page shell and layout structure
+- `styles.css`: outer presentation and responsive framing
+- `game.js`: gameplay loop, rendering, upgrades, waves, and UI logic
+- `serve.py`: local static server with a direct browser URL
+- `desktop/main.js`: Electron entry for desktop packaging
+- `Dockerfile`: static container image for deployment
+- `docker-compose.yml`: one-command local container launch
+
+## Notes
+
+- No frontend build step is required for browser play.
+- The in-page quick-start block has been removed to keep the play screen cleaner; launch instructions now live here in the README.
+- Test hooks are available through `window.render_game_to_text()` and `window.advanceTime(ms)` for deterministic browser checks.

@@ -14,3 +14,10 @@ Original prompt: 目前这是一个空文件夹，我需要你写一个游戏并
 - Reworked the entry layout with a stronger split-screen shell, added persistent run settings, and implemented Chinese/English switching plus difficulty/detail/shake controls.
 - Added menu-side configuration summaries, decorative sickle motifs, and richer world props so the battlefield and title screen feel less placeholder-like.
 - Fixed the oversized desktop layout ratio by shrinking the sidebar share and letting the canvas expand across the remaining width instead of capping at 1280px.
+- Removed the on-page quick-start block so the landing layout stays cleaner and keeps instructions in the README instead of the play surface.
+- Added an Electron desktop wrapper (`desktop/main.js`) plus packaging scripts for a portable Windows EXE.
+- Swapped desktop packaging from `electron-builder` to `@electron/packager` because this machine blocks the signing helper archive extraction; verified output now lands at `release/Spud Arena-win32-x64/Spud Arena.exe`.
+- Added Docker support with `Dockerfile`, `docker-compose.yml`, and nginx config so the static build can be served in a container on port 4173.
+- Rewrote the README to document browser play, EXE packaging, Docker startup, and the cleaner UI decision.
+- Verified browser flow after the UI cleanup with the Playwright web-game client and an additional direct Playwright capture; no console/page errors were emitted and the menu still transitions into gameplay.
+- Docker CLI is not installed on this machine, so the container files were added and reviewed but not executed locally.

@@ -32,8 +32,6 @@
     sigilKicker: document.getElementById("sigil-kicker"),
     sigilTitle: document.getElementById("sigil-title"),
     sigilBody: document.getElementById("sigil-body"),
-    launchKicker: document.getElementById("launch-kicker"),
-    launchHint: document.getElementById("launch-hint"),
     footerMove: document.getElementById("footer-move"),
     footerUpgrade: document.getElementById("footer-upgrade"),
     footerFullscreen: document.getElementById("footer-fullscreen")
@@ -84,8 +82,6 @@
       sigilKicker: "Harvest Sigil",
       sigilTitle: "Sickle And Wheat",
       sigilBody: "The field now opens with a stronger ritual frame, a cleaner control layout, and more ornamental harvest motifs so the game looks closer to a complete arcade piece.",
-      launchKicker: "Quick Launch",
-      launchHint: "Use the terminal command, or hit F5 in VSCode. The run link prints directly in the terminal.",
       footerMove: "Move: WASD / Arrow Keys",
       footerUpgrade: "Upgrade: 1 / 2 / 3 or click",
       footerFullscreen: "Fullscreen: F",
@@ -164,8 +160,6 @@
       sigilKicker: "收割纹章",
       sigilTitle: "镰刀与麦穗",
       sigilBody: "首屏现在加入了更完整的仪式感布局、可切换配置和更明显的收割主题装饰，让它更像一个完整的街机游戏，而不是单纯的测试画面。",
-      launchKicker: "快速启动",
-      launchHint: "可以在终端运行命令，也可以在 VSCode 里按 F5。游戏地址会直接打印在终端里。",
       footerMove: "移动：WASD / 方向键",
       footerUpgrade: "升级：1 / 2 / 3 或点击",
       footerFullscreen: "全屏：F",
@@ -267,8 +261,6 @@
     ui.sigilKicker.textContent = pack.sigilKicker;
     ui.sigilTitle.textContent = pack.sigilTitle;
     ui.sigilBody.textContent = pack.sigilBody;
-    ui.launchKicker.textContent = pack.launchKicker;
-    ui.launchHint.textContent = pack.launchHint;
     ui.footerMove.textContent = pack.footerMove;
     ui.footerUpgrade.textContent = pack.footerUpgrade;
     ui.footerFullscreen.textContent = pack.footerFullscreen;

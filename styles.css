@@ -74,8 +74,7 @@ body::after {
 
 .hero-copy,
 .config-card,
-.sigil-card,
-.launch-card {
+.sigil-card {
   border-radius: 28px;
   border: 1px solid var(--panel-border);
   background:
@@ -91,8 +90,7 @@ body::after {
   padding: 30px;
 }
 
-.config-card,
-.launch-card {
+.config-card {
   padding: 22px;
 }
 
@@ -132,8 +130,7 @@ body::after {
 }
 
 .lede,
-#sigil-body,
-#launch-hint {
+#sigil-body {
   margin: 16px 0 0;
   color: var(--text-dim);
   line-height: 1.72;
@@ -223,33 +220,6 @@ body::after {
   display: block;
 }
 
-.launch-card code,
-.launch-card a {
-  font-family: "Manrope", sans-serif;
-  font-weight: 700;
-}
-
-.launch-card code {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  background: rgba(22, 7, 3, 0.34);
-  color: var(--text-main);
-}
-
-.launch-card a {
-  display: inline-block;
-  margin-top: 12px;
-  color: #ffe7b4;
-  text-decoration: none;
-  word-break: break-all;
-}
-
-.launch-card a:hover {
-  color: #fff5de;
-}
-
 .game-panel {
   display: flex;
   flex-direction: column;
@@ -305,10 +275,6 @@ body::after {
   .hero-copy {
     grid-column: 1 / -1;
   }
-
-  .launch-card {
-    grid-column: 1 / -1;
-  }
 }
 
 @media (max-width: 840px) {
@@ -326,8 +292,7 @@ body::after {
 
   .hero-copy,
   .config-card,
-  .sigil-card,
-  .launch-card {
+  .sigil-card {
     border-radius: 24px;
   }
 
