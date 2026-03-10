@@ -9,9 +9,10 @@
     "dev": "py serve.py",
     "start": "py serve.py",
     "desktop": "electron .",
-    "build:desktop": "electron-packager . \"Spud Arena\" --platform=win32 --arch=x64 --out=release --overwrite --ignore=\"^(output|release|\\.git|\\.vscode)$\"",
-    "build:win": "electron-packager . \"Spud Arena\" --platform=win32 --arch=x64 --out=release --overwrite --ignore=\"^(output|release|\\.git|\\.vscode)$\"",
+    "build:desktop": "electron-packager . \"Spud Arena\" --platform=win32 --arch=x64 --icon=assets/desktop/app-icon.ico --out=release --overwrite --ignore=\"(^|[\\\\/])(output|release|installer|scripts|docker|__pycache__|\\.git|\\.vscode)([\\\\/]|$)|(^|[\\\\/])(progress\\.md|test-actions\\.json|Dockerfile|docker-compose\\.yml|run-game\\.ps1|serve\\.py|package-lock\\.json)([\\\\/]|$)\"",
+    "build:win": "electron-packager . \"Spud Arena\" --platform=win32 --arch=x64 --icon=assets/desktop/app-icon.ico --out=release --overwrite --ignore=\"(^|[\\\\/])(output|release|installer|scripts|docker|__pycache__|\\.git|\\.vscode)([\\\\/]|$)|(^|[\\\\/])(progress\\.md|test-actions\\.json|Dockerfile|docker-compose\\.yml|run-game\\.ps1|serve\\.py|package-lock\\.json)([\\\\/]|$)\"",
     "build:single-exe": "powershell -ExecutionPolicy Bypass -File .\\scripts\\build-single-exe.ps1",
+    "build:installer": "powershell -ExecutionPolicy Bypass -File .\\scripts\\build-installer.ps1",
     "docker:build": "docker build -t spud-arena .",
     "docker:run": "docker run --rm -p 4173:4173 spud-arena"
   },

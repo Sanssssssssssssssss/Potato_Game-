@@ -22,3 +22,6 @@ Original prompt: 目前这是一个空文件夹，我需要你写一个游戏并
 - Verified browser flow after the UI cleanup with the Playwright web-game client and an additional direct Playwright capture; no console/page errors were emitted and the menu still transitions into gameplay.
 - Docker CLI is not installed on this machine, so the container files were added and reviewed but not executed locally.
 - Added `scripts/build-single-exe.ps1` plus `npm run build:single-exe` to generate a single self-extracting Windows EXE for easier sharing; verified the packaged file launches and spawns the Electron game from a temp directory.
+- Reordered the shell so the game panel appears before the side rail on load, especially on narrower windows, and switched defaults to Chinese by moving settings storage to `spud-arena-settings-v4`.
+- Added generated desktop icon assets for a potato hero holding a gun and wired them into the browser favicon, Electron window, packaged EXE, single-file EXE, and installer.
+- Installed Inno Setup locally and added `installer/spud-arena.iss` plus `scripts/build-installer.ps1`; verified a real installer is produced at `release/installer/Spud-Arena-Setup-1.0.0.exe`.

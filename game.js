@@ -37,9 +37,9 @@
     footerFullscreen: document.getElementById("footer-fullscreen")
   };
 
-  const SETTINGS_KEY = "spud-arena-settings-v3";
+  const SETTINGS_KEY = "spud-arena-settings-v4";
   const defaultSettings = {
-    language: "en",
+    language: "zh",
     difficulty: "normal",
     detail: "lush",
     shake: "on"

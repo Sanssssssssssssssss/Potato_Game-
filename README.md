@@ -11,7 +11,7 @@ Spud Arena drops a battle-hardened potato into a scorched farm ring full of pest
 - Auto-fire combat with movement-first survival pressure
 - Fast three-card upgrade drafting
 - Boss rounds that spike the tempo every few waves
-- Chinese and English UI switching with persistent run settings
+- Chinese-first default UI with English switching and persistent run settings
 - Browser play, Windows desktop packaging, and Docker deployment in one repo
 
 ## Screens
@@ -105,6 +105,22 @@ release/Spud-Arena-1.0.0-single-file.exe
 
 This file can be sent directly to another Windows x64 machine. When launched, it extracts to a temporary folder, starts the game, and then exits back to a single-file distribution flow.
 
+## Build A Real Installer
+
+If you want a standard Windows setup wizard with shortcuts and uninstall support:
+
+```powershell
+npm run build:installer
+```
+
+Output:
+
+```text
+release/installer/Spud-Arena-Setup-1.0.0.exe
+```
+
+This installer uses the custom potato-with-gun app icon, creates a normal installed app, and supports desktop shortcut creation plus uninstall.
+
 ## Run With Docker
 
 ### Build The Image
@@ -138,6 +154,9 @@ docker compose up --build
 - `game.js`: gameplay loop, rendering, upgrades, waves, and UI logic
 - `serve.py`: local static server with a direct browser URL
 - `desktop/main.js`: Electron entry for desktop packaging
+- `installer/spud-arena.iss`: Inno Setup installer definition
+- `scripts/build-installer.ps1`: installer compiler entry
+- `scripts/generate-app-icon.py`: custom icon generator
 - `Dockerfile`: static container image for deployment
 - `docker-compose.yml`: one-command local container launch
 

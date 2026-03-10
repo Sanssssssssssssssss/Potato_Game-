@@ -7,6 +7,7 @@ function createWindow() {
     height: 980,
     minWidth: 1280,
     minHeight: 760,
+    icon: path.join(__dirname, "..", "assets", "desktop", "app-icon.png"),
     backgroundColor: "#1b0d08",
     autoHideMenuBar: true,
     title: "Spud Arena",

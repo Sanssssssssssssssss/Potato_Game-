@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spud Arena</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="./assets/desktop/app-icon-64.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@700;800&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -11,6 +12,17 @@
 </head>
 <body>
   <main class="app-shell">
+    <section class="game-panel">
+      <div class="canvas-shell">
+        <canvas id="game" width="1280" height="720" aria-label="Spud Arena game canvas"></canvas>
+      </div>
+      <div class="panel-footer">
+        <span id="footer-move"></span>
+        <span id="footer-upgrade"></span>
+        <span id="footer-fullscreen"></span>
+      </div>
+    </section>
+
     <section class="side-rail">
       <article class="hero-copy">
         <p class="eyebrow" id="hero-eyebrow">Arcade Survival</p>
@@ -88,17 +100,6 @@
           </svg>
         </div>
       </article>
-    </section>
-
-    <section class="game-panel">
-      <div class="canvas-shell">
-        <canvas id="game" width="1280" height="720" aria-label="Spud Arena game canvas"></canvas>
-      </div>
-      <div class="panel-footer">
-        <span id="footer-move"></span>
-        <span id="footer-upgrade"></span>
-        <span id="footer-fullscreen"></span>
-      </div>
     </section>
   </main>
   <script src="./game.js"></script>

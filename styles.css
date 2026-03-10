@@ -59,7 +59,8 @@ body::after {
 .app-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  grid-template-areas: "game rail";
   gap: 20px;
   align-items: start;
   max-width: 2200px;
@@ -68,6 +69,7 @@ body::after {
 }
 
 .side-rail {
+  grid-area: rail;
   display: grid;
   gap: 18px;
 }
@@ -221,6 +223,7 @@ body::after {
 }
 
 .game-panel {
+  grid-area: game;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -265,6 +268,9 @@ body::after {
 @media (max-width: 1280px) {
   .app-shell {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "game"
+      "rail";
     padding: 18px;
   }
 

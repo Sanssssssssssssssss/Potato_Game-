@@ -16,6 +16,7 @@ $sedPath = Join-Path $stageDir "spud-arena-single-exe.sed"
 $archivePath = Join-Path $stageDir "spud-arena.zip"
 $launcherPs1Path = Join-Path $stageDir "launch-spud.ps1"
 $launcherCmdPath = Join-Path $stageDir "launch-spud.cmd"
+$iconPath = Join-Path $projectRoot "assets\desktop\app-icon.ico"
 $targetPath = Join-Path $outputDir ("Spud-Arena-" + $version + "-single-file.exe")
 
 if (Test-Path $stageDir) {
@@ -62,6 +63,8 @@ $stringLines = @(
   "FinishMessage=",
   "TargetName=$targetPath",
   "FriendlyName=Spud Arena",
+  "IconFile=$iconPath",
+  "IconIndex=0",
   "AppLaunched=launch-spud.cmd",
   "PostInstallCmd=<None>",
   "AdminQuietInstCmd=",
